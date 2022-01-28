@@ -13,3 +13,4 @@ graph init --product hosted-service --from-contract <address> --allow-simple-nam
 cd <dir>
 graph deploy <subgraph-name> -g http://localhost:8020/ -i http://localhost:5001/
 ```
+# subgraphs
