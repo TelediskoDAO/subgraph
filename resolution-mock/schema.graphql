@@ -1,0 +1,24 @@
+type ResolutionApproved @entity {
+  id: ID!
+  approvedFrom: Bytes! # address
+  approvedId: BigInt! # uint256
+  testData: BigInt! # uint256
+}
+
+type ResolutionCreated @entity {
+  id: ID!
+  createdFrom: Bytes! # address
+  createdId: BigInt! # uint256
+}
+
+type ResolutionTest @entity {
+  id: ID!
+  approvedFrom: Bytes! # address
+  approvedId: BigInt! # uint256
+}
+
+type ResolutionUpdated @entity {
+  id: ID!
+  updatedFrom: Bytes! # address
+  updatedId: BigInt! # uint256
+}

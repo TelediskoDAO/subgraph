@@ -1,0 +1,16 @@
+{
+  "name": "resolution-mock",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ TelediskoDAO/resolution-mock",
+    "create-local": "graph create --node http://localhost:8020/ TelediskoDAO/resolution-mock",
+    "remove-local": "graph remove --node http://localhost:8020/ TelediskoDAO/resolution-mock",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 TelediskoDAO/resolution-mock"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.26.0",
+    "@graphprotocol/graph-ts": "0.24.1"
+  }
+}

@@ -1,0 +1,185 @@
+[
+  { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "approvedFrom",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "approvedId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "testData",
+        "type": "uint256"
+      }
+    ],
+    "name": "ResolutionApproved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "createdFrom",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "createdId",
+        "type": "uint256"
+      }
+    ],
+    "name": "ResolutionCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "approvedFrom",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "approvedId",
+        "type": "uint256"
+      }
+    ],
+    "name": "ResolutionTest",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "updatedFrom",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "updatedId",
+        "type": "uint256"
+      }
+    ],
+    "name": "ResolutionUpdated",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "resolutionId", "type": "uint256" }
+    ],
+    "name": "approveResolution",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "string", "name": "dataURI", "type": "string" },
+      {
+        "internalType": "uint256",
+        "name": "resolutionTypeId",
+        "type": "uint256"
+      }
+    ],
+    "name": "createResolution",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "resolutionId", "type": "uint256" }
+    ],
+    "name": "getResolution",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "string", "name": "dataURI", "type": "string" },
+          {
+            "internalType": "uint256",
+            "name": "approveTimestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "resolutionTypeId",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct ResolutionMock.Resolution",
+        "name": "resolution",
+        "type": "tuple"
+      },
+      { "internalType": "uint256", "name": "votingStart", "type": "uint256" },
+      { "internalType": "uint256", "name": "votingEnd", "type": "uint256" },
+      { "internalType": "string", "name": "status", "type": "string" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "resolutionTypes",
+    "outputs": [
+      { "internalType": "string", "name": "name", "type": "string" },
+      { "internalType": "uint256", "name": "quorum", "type": "uint256" },
+      { "internalType": "uint256", "name": "noticePeriod", "type": "uint256" },
+      { "internalType": "uint256", "name": "votingPeriod", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "resolutions",
+    "outputs": [
+      { "internalType": "string", "name": "dataURI", "type": "string" },
+      {
+        "internalType": "uint256",
+        "name": "approveTimestamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "resolutionTypeId",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "resolutionId", "type": "uint256" },
+      { "internalType": "string", "name": "dataURI", "type": "string" },
+      {
+        "internalType": "uint256",
+        "name": "resolutionTypeId",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateResolution",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
