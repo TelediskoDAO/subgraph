@@ -17,6 +17,7 @@ docker-compose up
 ```
 
 ## Deploy locally
+```
 graph create --node http://localhost:8020/ <subgraph-name>
 graph init --product hosted-service --from-contract <address> --allow-simple-name --index-events --contract-name <contract-name> --abi <dir> --network mainnet --protocol ethereum <subgraph-name>
 graph deploy <subgraph-name> -g http://localhost:8020/ -i http://localhost:5001/
