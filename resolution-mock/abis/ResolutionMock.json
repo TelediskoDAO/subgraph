@@ -6,19 +6,38 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "approvedFrom",
+        "name": "from",
         "type": "address"
       },
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "approvedId",
+        "name": "resolutionId",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "testData",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "DelegateLostVotingPower",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "resolutionId",
         "type": "uint256"
       }
     ],
@@ -31,13 +50,13 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "createdFrom",
+        "name": "from",
         "type": "address"
       },
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "createdId",
+        "name": "resolutionId",
         "type": "uint256"
       }
     ],
@@ -50,17 +69,17 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "approvedFrom",
+        "name": "from",
         "type": "address"
       },
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "approvedId",
+        "name": "resolutionId",
         "type": "uint256"
       }
     ],
-    "name": "ResolutionTest",
+    "name": "ResolutionUpdated",
     "type": "event"
   },
   {
@@ -69,17 +88,29 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "updatedFrom",
+        "name": "from",
         "type": "address"
       },
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "updatedId",
+        "name": "resolutionId",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "votingPower",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isYes",
+        "type": "bool"
       }
     ],
-    "name": "ResolutionUpdated",
+    "name": "ResolutionVoted",
     "type": "event"
   },
   {
@@ -93,47 +124,18 @@
   },
   {
     "inputs": [
+      { "internalType": "uint256", "name": "resolutionId", "type": "uint256" },
       { "internalType": "string", "name": "dataURI", "type": "string" },
       {
         "internalType": "uint256",
         "name": "resolutionTypeId",
         "type": "uint256"
-      }
+      },
+      { "internalType": "bool", "name": "isNegative", "type": "bool" }
     ],
     "name": "createResolution",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "resolutionId", "type": "uint256" }
-    ],
-    "name": "getResolution",
-    "outputs": [
-      {
-        "components": [
-          { "internalType": "string", "name": "dataURI", "type": "string" },
-          {
-            "internalType": "uint256",
-            "name": "approveTimestamp",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "resolutionTypeId",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ResolutionMock.Resolution",
-        "name": "resolution",
-        "type": "tuple"
-      },
-      { "internalType": "uint256", "name": "votingStart", "type": "uint256" },
-      { "internalType": "uint256", "name": "votingEnd", "type": "uint256" },
-      { "internalType": "string", "name": "status", "type": "string" }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -143,7 +145,8 @@
       { "internalType": "string", "name": "name", "type": "string" },
       { "internalType": "uint256", "name": "quorum", "type": "uint256" },
       { "internalType": "uint256", "name": "noticePeriod", "type": "uint256" },
-      { "internalType": "uint256", "name": "votingPeriod", "type": "uint256" }
+      { "internalType": "uint256", "name": "votingPeriod", "type": "uint256" },
+      { "internalType": "bool", "name": "canBeNegative", "type": "bool" }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -155,16 +158,28 @@
       { "internalType": "string", "name": "dataURI", "type": "string" },
       {
         "internalType": "uint256",
-        "name": "approveTimestamp",
+        "name": "resolutionTypeId",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "resolutionTypeId",
+        "name": "approveTimestamp",
         "type": "uint256"
-      }
+      },
+      { "internalType": "uint256", "name": "snapshotId", "type": "uint256" },
+      { "internalType": "uint256", "name": "yesVotesTotal", "type": "uint256" },
+      { "internalType": "bool", "name": "isNegative", "type": "bool" },
+      { "internalType": "bool", "name": "isPreDraft", "type": "bool" },
+      { "internalType": "bool", "name": "isCreated", "type": "bool" }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "snapshotAll",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

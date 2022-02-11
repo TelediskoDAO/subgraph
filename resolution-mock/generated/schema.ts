@@ -11,14 +11,82 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
+export class DelegateLostVotingPower extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("from", Value.fromBytes(Bytes.empty()));
+    this.set("resolutionId", Value.fromBigInt(BigInt.zero()));
+    this.set("amount", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(
+      id != null,
+      "Cannot save DelegateLostVotingPower entity without an ID"
+    );
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save DelegateLostVotingPower entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("DelegateLostVotingPower", id.toString(), this);
+    }
+  }
+
+  static load(id: string): DelegateLostVotingPower | null {
+    return changetype<DelegateLostVotingPower | null>(
+      store.get("DelegateLostVotingPower", id)
+    );
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get from(): Bytes {
+    let value = this.get("from");
+    return value!.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
+  }
+
+  get resolutionId(): BigInt {
+    let value = this.get("resolutionId");
+    return value!.toBigInt();
+  }
+
+  set resolutionId(value: BigInt) {
+    this.set("resolutionId", Value.fromBigInt(value));
+  }
+
+  get amount(): BigInt {
+    let value = this.get("amount");
+    return value!.toBigInt();
+  }
+
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
+  }
+}
+
 export class ResolutionApproved extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("approvedFrom", Value.fromBytes(Bytes.empty()));
-    this.set("approvedId", Value.fromBigInt(BigInt.zero()));
-    this.set("testData", Value.fromBigInt(BigInt.zero()));
+    this.set("from", Value.fromBytes(Bytes.empty()));
+    this.set("resolutionId", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -49,31 +117,22 @@ export class ResolutionApproved extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get approvedFrom(): Bytes {
-    let value = this.get("approvedFrom");
+  get from(): Bytes {
+    let value = this.get("from");
     return value!.toBytes();
   }
 
-  set approvedFrom(value: Bytes) {
-    this.set("approvedFrom", Value.fromBytes(value));
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
   }
 
-  get approvedId(): BigInt {
-    let value = this.get("approvedId");
+  get resolutionId(): BigInt {
+    let value = this.get("resolutionId");
     return value!.toBigInt();
   }
 
-  set approvedId(value: BigInt) {
-    this.set("approvedId", Value.fromBigInt(value));
-  }
-
-  get testData(): BigInt {
-    let value = this.get("testData");
-    return value!.toBigInt();
-  }
-
-  set testData(value: BigInt) {
-    this.set("testData", Value.fromBigInt(value));
+  set resolutionId(value: BigInt) {
+    this.set("resolutionId", Value.fromBigInt(value));
   }
 }
 
@@ -82,8 +141,8 @@ export class ResolutionCreated extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("createdFrom", Value.fromBytes(Bytes.empty()));
-    this.set("createdId", Value.fromBigInt(BigInt.zero()));
+    this.set("from", Value.fromBytes(Bytes.empty()));
+    this.set("resolutionId", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -114,76 +173,22 @@ export class ResolutionCreated extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get createdFrom(): Bytes {
-    let value = this.get("createdFrom");
+  get from(): Bytes {
+    let value = this.get("from");
     return value!.toBytes();
   }
 
-  set createdFrom(value: Bytes) {
-    this.set("createdFrom", Value.fromBytes(value));
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
   }
 
-  get createdId(): BigInt {
-    let value = this.get("createdId");
+  get resolutionId(): BigInt {
+    let value = this.get("resolutionId");
     return value!.toBigInt();
   }
 
-  set createdId(value: BigInt) {
-    this.set("createdId", Value.fromBigInt(value));
-  }
-}
-
-export class ResolutionTest extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-
-    this.set("approvedFrom", Value.fromBytes(Bytes.empty()));
-    this.set("approvedId", Value.fromBigInt(BigInt.zero()));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save ResolutionTest entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        "Cannot save ResolutionTest entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
-      );
-      store.set("ResolutionTest", id.toString(), this);
-    }
-  }
-
-  static load(id: string): ResolutionTest | null {
-    return changetype<ResolutionTest | null>(store.get("ResolutionTest", id));
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value!.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get approvedFrom(): Bytes {
-    let value = this.get("approvedFrom");
-    return value!.toBytes();
-  }
-
-  set approvedFrom(value: Bytes) {
-    this.set("approvedFrom", Value.fromBytes(value));
-  }
-
-  get approvedId(): BigInt {
-    let value = this.get("approvedId");
-    return value!.toBigInt();
-  }
-
-  set approvedId(value: BigInt) {
-    this.set("approvedId", Value.fromBigInt(value));
+  set resolutionId(value: BigInt) {
+    this.set("resolutionId", Value.fromBigInt(value));
   }
 }
 
@@ -192,8 +197,8 @@ export class ResolutionUpdated extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("updatedFrom", Value.fromBytes(Bytes.empty()));
-    this.set("updatedId", Value.fromBigInt(BigInt.zero()));
+    this.set("from", Value.fromBytes(Bytes.empty()));
+    this.set("resolutionId", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -224,21 +229,95 @@ export class ResolutionUpdated extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get updatedFrom(): Bytes {
-    let value = this.get("updatedFrom");
+  get from(): Bytes {
+    let value = this.get("from");
     return value!.toBytes();
   }
 
-  set updatedFrom(value: Bytes) {
-    this.set("updatedFrom", Value.fromBytes(value));
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
   }
 
-  get updatedId(): BigInt {
-    let value = this.get("updatedId");
+  get resolutionId(): BigInt {
+    let value = this.get("resolutionId");
     return value!.toBigInt();
   }
 
-  set updatedId(value: BigInt) {
-    this.set("updatedId", Value.fromBigInt(value));
+  set resolutionId(value: BigInt) {
+    this.set("resolutionId", Value.fromBigInt(value));
+  }
+}
+
+export class ResolutionVoted extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("from", Value.fromBytes(Bytes.empty()));
+    this.set("resolutionId", Value.fromBigInt(BigInt.zero()));
+    this.set("votingPower", Value.fromBigInt(BigInt.zero()));
+    this.set("isYes", Value.fromBoolean(false));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save ResolutionVoted entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save ResolutionVoted entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("ResolutionVoted", id.toString(), this);
+    }
+  }
+
+  static load(id: string): ResolutionVoted | null {
+    return changetype<ResolutionVoted | null>(store.get("ResolutionVoted", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get from(): Bytes {
+    let value = this.get("from");
+    return value!.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
+  }
+
+  get resolutionId(): BigInt {
+    let value = this.get("resolutionId");
+    return value!.toBigInt();
+  }
+
+  set resolutionId(value: BigInt) {
+    this.set("resolutionId", Value.fromBigInt(value));
+  }
+
+  get votingPower(): BigInt {
+    let value = this.get("votingPower");
+    return value!.toBigInt();
+  }
+
+  set votingPower(value: BigInt) {
+    this.set("votingPower", Value.fromBigInt(value));
+  }
+
+  get isYes(): boolean {
+    let value = this.get("isYes");
+    return value!.toBoolean();
+  }
+
+  set isYes(value: boolean) {
+    this.set("isYes", Value.fromBoolean(value));
   }
 }
