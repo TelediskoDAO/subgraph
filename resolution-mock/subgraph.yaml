@@ -8,26 +8,28 @@ dataSources:
     source:
       address: "0xdc2d881555E21A7E09BF96F8Fa1deD6304724833"
       abi: ResolutionMock
-      startBlock: 10086673 
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
+        - DelegateLostVotingPower
         - ResolutionApproved
         - ResolutionCreated
-        - ResolutionTest
         - ResolutionUpdated
+        - ResolutionVoted
       abis:
         - name: ResolutionMock
           file: ./abis/ResolutionMock.json
       eventHandlers:
-        - event: ResolutionApproved(indexed address,indexed uint256,uint256)
+        - event: DelegateLostVotingPower(indexed address,indexed uint256,uint256)
+          handler: handleDelegateLostVotingPower
+        - event: ResolutionApproved(indexed address,indexed uint256)
           handler: handleResolutionApproved
         - event: ResolutionCreated(indexed address,indexed uint256)
           handler: handleResolutionCreated
-        - event: ResolutionTest(indexed address,indexed uint256)
-          handler: handleResolutionTest
         - event: ResolutionUpdated(indexed address,indexed uint256)
           handler: handleResolutionUpdated
+        - event: ResolutionVoted(indexed address,indexed uint256,uint256,bool)
+          handler: handleResolutionVoted
       file: ./src/mapping.ts

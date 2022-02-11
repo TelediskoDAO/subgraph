@@ -1,25 +1,36 @@
 import {
+  DelegateLostVotingPower as DelegateLostVotingPowerEvent,
   ResolutionApproved as ResolutionApprovedEvent,
   ResolutionCreated as ResolutionCreatedEvent,
-  ResolutionTest as ResolutionTestEvent,
-  ResolutionUpdated as ResolutionUpdatedEvent
+  ResolutionUpdated as ResolutionUpdatedEvent,
+  ResolutionVoted as ResolutionVotedEvent
 } from "../generated/ResolutionMock/ResolutionMock"
 import {
+  DelegateLostVotingPower,
   ResolutionApproved,
   ResolutionCreated,
-  ResolutionTest,
-  ResolutionUpdated
+  ResolutionUpdated,
+  ResolutionVoted
 } from "../generated/schema"
 
-import { ipfs } from '@graphprotocol/graph-ts/index'
+export function handleDelegateLostVotingPower(
+  event: DelegateLostVotingPowerEvent
+): void {
+  let entity = new DelegateLostVotingPower(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  )
+  entity.from = event.params.from
+  entity.resolutionId = event.params.resolutionId
+  entity.amount = event.params.amount
+  entity.save()
+}
 
 export function handleResolutionApproved(event: ResolutionApprovedEvent): void {
   let entity = new ResolutionApproved(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   )
-  entity.approvedFrom = event.params.approvedFrom
-  entity.approvedId = event.params.approvedId
-  entity.testData = event.params.testData
+  entity.from = event.params.from
+  entity.resolutionId = event.params.resolutionId
   entity.save()
 }
 
@@ -27,18 +38,8 @@ export function handleResolutionCreated(event: ResolutionCreatedEvent): void {
   let entity = new ResolutionCreated(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   )
-  entity.createdFrom = event.params.createdFrom
-  entity.createdId = event.params.createdId
-  entity.content = ipfs.cat(event.params.contentHash)
-  entity.save()
-}
-
-export function handleResolutionTest(event: ResolutionTestEvent): void {
-  let entity = new ResolutionTest(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  )
-  entity.approvedFrom = event.params.approvedFrom
-  entity.approvedId = event.params.approvedId
+  entity.from = event.params.from
+  entity.resolutionId = event.params.resolutionId
   entity.save()
 }
 
@@ -46,7 +47,18 @@ export function handleResolutionUpdated(event: ResolutionUpdatedEvent): void {
   let entity = new ResolutionUpdated(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   )
-  entity.updatedFrom = event.params.updatedFrom
-  entity.updatedId = event.params.updatedId
+  entity.from = event.params.from
+  entity.resolutionId = event.params.resolutionId
+  entity.save()
+}
+
+export function handleResolutionVoted(event: ResolutionVotedEvent): void {
+  let entity = new ResolutionVoted(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  )
+  entity.from = event.params.from
+  entity.resolutionId = event.params.resolutionId
+  entity.votingPower = event.params.votingPower
+  entity.isYes = event.params.isYes
   entity.save()
 }
