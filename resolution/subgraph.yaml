@@ -1,0 +1,36 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: ResolutionManager
+    network: rinkeby
+    source:
+      address: "0xE84aCBE831EE9A435a9864F53DF3C8beb84ce0f6"
+      abi: ResolutionManager
+      startBlock: 10172954
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - DelegateLostVotingPower
+        - ResolutionApproved
+        - ResolutionCreated
+        - ResolutionUpdated
+        - ResolutionVoted
+      abis:
+        - name: ResolutionManager
+          file: ./abis/ResolutionManager.json
+      eventHandlers:
+        - event: DelegateLostVotingPower(indexed address,indexed uint256,uint256)
+          handler: handleDelegateLostVotingPower
+        - event: ResolutionApproved(indexed address,indexed uint256)
+          handler: handleResolutionApproved
+        - event: ResolutionCreated(indexed address,indexed uint256)
+          handler: handleResolutionCreated
+        - event: ResolutionUpdated(indexed address,indexed uint256)
+          handler: handleResolutionUpdated
+        - event: ResolutionVoted(indexed address,indexed uint256,uint256,bool)
+          handler: handleResolutionVoted
+      file: ./src/mapping.ts
