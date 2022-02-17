@@ -10,7 +10,8 @@ import {
 } from "../generated/ResolutionManager/ResolutionManager"
 
 const setValuesFromResolutionContract = (resolutionManager: ResolutionManager, resolutionId: BigInt): void => {
-  const resolutionEntity = (Resolution.load(resolutionId.toString()) || new Resolution(resolutionId.toString())) as Resolution
+  const resolutionIdStringified = resolutionId.toString()
+  const resolutionEntity = (Resolution.load(resolutionIdStringified) || new Resolution(resolutionIdStringified)) as Resolution
   
   // get resolution data from the blockchain
   const currentResolution = resolutionManager.resolutions(resolutionId)
@@ -34,7 +35,7 @@ const setValuesFromResolutionContract = (resolutionManager: ResolutionManager, r
       resolutionEntity.content = content.toString()
     }
   } else {
-    log.error('No ipfs data found for resolution {} with ipfsDataURI {}', [resolutionId.toString(), ipfsDataURI])
+    log.error('No ipfs data found for resolution {} with ipfsDataURI {}', [resolutionIdStringified, ipfsDataURI])
   }
 
   resolutionEntity.save()
