@@ -1,0 +1,11 @@
+type Resolution @entity {
+  id: ID!
+  title: String
+  content: String
+  isNegative: Boolean!
+  yesVotesTotal: BigInt!
+  typeId: BigInt!
+  approveTimestamp: BigInt!
+  createTimestamp: BigInt!
+  updateTimestamp: BigInt!
+}

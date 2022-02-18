@@ -132,7 +132,49 @@ export class ResolutionVoted__Params {
   }
 }
 
-export class ResolutionMock__resolutionTypesResult {
+export class ResolutionManager__getResolutionTypesResultValue0Struct extends ethereum.Tuple {
+  get name(): string {
+    return this[0].toString();
+  }
+
+  get quorum(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get noticePeriod(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get votingPeriod(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get canBeNegative(): boolean {
+    return this[4].toBoolean();
+  }
+}
+
+export class ResolutionManager__getVoterVoteResult {
+  value0: boolean;
+  value1: boolean;
+  value2: BigInt;
+
+  constructor(value0: boolean, value1: boolean, value2: BigInt) {
+    this.value0 = value0;
+    this.value1 = value1;
+    this.value2 = value2;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromBoolean(this.value0));
+    map.set("value1", ethereum.Value.fromBoolean(this.value1));
+    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
+    return map;
+  }
+}
+
+export class ResolutionManager__resolutionTypesResult {
   value0: string;
   value1: BigInt;
   value2: BigInt;
@@ -164,15 +206,13 @@ export class ResolutionMock__resolutionTypesResult {
   }
 }
 
-export class ResolutionMock__resolutionsResult {
+export class ResolutionManager__resolutionsResult {
   value0: string;
   value1: BigInt;
   value2: BigInt;
   value3: BigInt;
   value4: BigInt;
   value5: boolean;
-  value6: boolean;
-  value7: boolean;
 
   constructor(
     value0: string,
@@ -180,9 +220,7 @@ export class ResolutionMock__resolutionsResult {
     value2: BigInt,
     value3: BigInt,
     value4: BigInt,
-    value5: boolean,
-    value6: boolean,
-    value7: boolean
+    value5: boolean
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -190,8 +228,6 @@ export class ResolutionMock__resolutionsResult {
     this.value3 = value3;
     this.value4 = value4;
     this.value5 = value5;
-    this.value6 = value6;
-    this.value7 = value7;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -202,28 +238,24 @@ export class ResolutionMock__resolutionsResult {
     map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
     map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
     map.set("value5", ethereum.Value.fromBoolean(this.value5));
-    map.set("value6", ethereum.Value.fromBoolean(this.value6));
-    map.set("value7", ethereum.Value.fromBoolean(this.value7));
     return map;
   }
 }
 
-export class ResolutionMock extends ethereum.SmartContract {
-  static bind(address: Address): ResolutionMock {
-    return new ResolutionMock("ResolutionMock", address);
+export class ResolutionManager extends ethereum.SmartContract {
+  static bind(address: Address): ResolutionManager {
+    return new ResolutionManager("ResolutionManager", address);
   }
 
   createResolution(
-    resolutionId: BigInt,
     dataURI: string,
     resolutionTypeId: BigInt,
     isNegative: boolean
   ): BigInt {
     let result = super.call(
       "createResolution",
-      "createResolution(uint256,string,uint256,bool):(uint256)",
+      "createResolution(string,uint256,bool):(uint256)",
       [
-        ethereum.Value.fromUnsignedBigInt(resolutionId),
         ethereum.Value.fromString(dataURI),
         ethereum.Value.fromUnsignedBigInt(resolutionTypeId),
         ethereum.Value.fromBoolean(isNegative)
@@ -234,16 +266,14 @@ export class ResolutionMock extends ethereum.SmartContract {
   }
 
   try_createResolution(
-    resolutionId: BigInt,
     dataURI: string,
     resolutionTypeId: BigInt,
     isNegative: boolean
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "createResolution",
-      "createResolution(uint256,string,uint256,bool):(uint256)",
+      "createResolution(string,uint256,bool):(uint256)",
       [
-        ethereum.Value.fromUnsignedBigInt(resolutionId),
         ethereum.Value.fromString(dataURI),
         ethereum.Value.fromUnsignedBigInt(resolutionTypeId),
         ethereum.Value.fromBoolean(isNegative)
@@ -256,14 +286,115 @@ export class ResolutionMock extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  resolutionTypes(param0: BigInt): ResolutionMock__resolutionTypesResult {
+  getResolutionResult(resolutionId: BigInt): boolean {
+    let result = super.call(
+      "getResolutionResult",
+      "getResolutionResult(uint256):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(resolutionId)]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_getResolutionResult(resolutionId: BigInt): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "getResolutionResult",
+      "getResolutionResult(uint256):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(resolutionId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  getResolutionTypes(): Array<
+    ResolutionManager__getResolutionTypesResultValue0Struct
+  > {
+    let result = super.call(
+      "getResolutionTypes",
+      "getResolutionTypes():((string,uint256,uint256,uint256,bool)[7])",
+      []
+    );
+
+    return result[0].toTupleArray<
+      ResolutionManager__getResolutionTypesResultValue0Struct
+    >();
+  }
+
+  try_getResolutionTypes(): ethereum.CallResult<
+    Array<ResolutionManager__getResolutionTypesResultValue0Struct>
+  > {
+    let result = super.tryCall(
+      "getResolutionTypes",
+      "getResolutionTypes():((string,uint256,uint256,uint256,bool)[7])",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      value[0].toTupleArray<
+        ResolutionManager__getResolutionTypesResultValue0Struct
+      >()
+    );
+  }
+
+  getVoterVote(
+    resolutionId: BigInt,
+    voter: Address
+  ): ResolutionManager__getVoterVoteResult {
+    let result = super.call(
+      "getVoterVote",
+      "getVoterVote(uint256,address):(bool,bool,uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(resolutionId),
+        ethereum.Value.fromAddress(voter)
+      ]
+    );
+
+    return new ResolutionManager__getVoterVoteResult(
+      result[0].toBoolean(),
+      result[1].toBoolean(),
+      result[2].toBigInt()
+    );
+  }
+
+  try_getVoterVote(
+    resolutionId: BigInt,
+    voter: Address
+  ): ethereum.CallResult<ResolutionManager__getVoterVoteResult> {
+    let result = super.tryCall(
+      "getVoterVote",
+      "getVoterVote(uint256,address):(bool,bool,uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(resolutionId),
+        ethereum.Value.fromAddress(voter)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new ResolutionManager__getVoterVoteResult(
+        value[0].toBoolean(),
+        value[1].toBoolean(),
+        value[2].toBigInt()
+      )
+    );
+  }
+
+  resolutionTypes(param0: BigInt): ResolutionManager__resolutionTypesResult {
     let result = super.call(
       "resolutionTypes",
       "resolutionTypes(uint256):(string,uint256,uint256,uint256,bool)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
-    return new ResolutionMock__resolutionTypesResult(
+    return new ResolutionManager__resolutionTypesResult(
       result[0].toString(),
       result[1].toBigInt(),
       result[2].toBigInt(),
@@ -274,7 +405,7 @@ export class ResolutionMock extends ethereum.SmartContract {
 
   try_resolutionTypes(
     param0: BigInt
-  ): ethereum.CallResult<ResolutionMock__resolutionTypesResult> {
+  ): ethereum.CallResult<ResolutionManager__resolutionTypesResult> {
     let result = super.tryCall(
       "resolutionTypes",
       "resolutionTypes(uint256):(string,uint256,uint256,uint256,bool)",
@@ -285,7 +416,7 @@ export class ResolutionMock extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new ResolutionMock__resolutionTypesResult(
+      new ResolutionManager__resolutionTypesResult(
         value[0].toString(),
         value[1].toBigInt(),
         value[2].toBigInt(),
@@ -295,31 +426,29 @@ export class ResolutionMock extends ethereum.SmartContract {
     );
   }
 
-  resolutions(param0: BigInt): ResolutionMock__resolutionsResult {
+  resolutions(param0: BigInt): ResolutionManager__resolutionsResult {
     let result = super.call(
       "resolutions",
-      "resolutions(uint256):(string,uint256,uint256,uint256,uint256,bool,bool,bool)",
+      "resolutions(uint256):(string,uint256,uint256,uint256,uint256,bool)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
-    return new ResolutionMock__resolutionsResult(
+    return new ResolutionManager__resolutionsResult(
       result[0].toString(),
       result[1].toBigInt(),
       result[2].toBigInt(),
       result[3].toBigInt(),
       result[4].toBigInt(),
-      result[5].toBoolean(),
-      result[6].toBoolean(),
-      result[7].toBoolean()
+      result[5].toBoolean()
     );
   }
 
   try_resolutions(
     param0: BigInt
-  ): ethereum.CallResult<ResolutionMock__resolutionsResult> {
+  ): ethereum.CallResult<ResolutionManager__resolutionsResult> {
     let result = super.tryCall(
       "resolutions",
-      "resolutions(uint256):(string,uint256,uint256,uint256,uint256,bool,bool,bool)",
+      "resolutions(uint256):(string,uint256,uint256,uint256,uint256,bool)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -327,15 +456,13 @@ export class ResolutionMock extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new ResolutionMock__resolutionsResult(
+      new ResolutionManager__resolutionsResult(
         value[0].toString(),
         value[1].toBigInt(),
         value[2].toBigInt(),
         value[3].toBigInt(),
         value[4].toBigInt(),
-        value[5].toBoolean(),
-        value[6].toBoolean(),
-        value[7].toBoolean()
+        value[5].toBoolean()
       )
     );
   }
@@ -371,6 +498,18 @@ export class ConstructorCall__Inputs {
 
   constructor(call: ConstructorCall) {
     this._call = call;
+  }
+
+  get shareholderRegistry(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get telediskoToken(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get voting(): Address {
+    return this._call.inputValues[2].value.toAddress();
   }
 }
 
@@ -429,20 +568,16 @@ export class CreateResolutionCall__Inputs {
     this._call = call;
   }
 
-  get resolutionId(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
   get dataURI(): string {
-    return this._call.inputValues[1].value.toString();
+    return this._call.inputValues[0].value.toString();
   }
 
   get resolutionTypeId(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
+    return this._call.inputValues[1].value.toBigInt();
   }
 
   get isNegative(): boolean {
-    return this._call.inputValues[3].value.toBoolean();
+    return this._call.inputValues[2].value.toBoolean();
   }
 }
 
@@ -455,6 +590,96 @@ export class CreateResolutionCall__Outputs {
 
   get value0(): BigInt {
     return this._call.outputValues[0].value.toBigInt();
+  }
+}
+
+export class SetShareholderRegistryCall extends ethereum.Call {
+  get inputs(): SetShareholderRegistryCall__Inputs {
+    return new SetShareholderRegistryCall__Inputs(this);
+  }
+
+  get outputs(): SetShareholderRegistryCall__Outputs {
+    return new SetShareholderRegistryCall__Outputs(this);
+  }
+}
+
+export class SetShareholderRegistryCall__Inputs {
+  _call: SetShareholderRegistryCall;
+
+  constructor(call: SetShareholderRegistryCall) {
+    this._call = call;
+  }
+
+  get shareholderRegistry(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetShareholderRegistryCall__Outputs {
+  _call: SetShareholderRegistryCall;
+
+  constructor(call: SetShareholderRegistryCall) {
+    this._call = call;
+  }
+}
+
+export class SetTelediskoTokenCall extends ethereum.Call {
+  get inputs(): SetTelediskoTokenCall__Inputs {
+    return new SetTelediskoTokenCall__Inputs(this);
+  }
+
+  get outputs(): SetTelediskoTokenCall__Outputs {
+    return new SetTelediskoTokenCall__Outputs(this);
+  }
+}
+
+export class SetTelediskoTokenCall__Inputs {
+  _call: SetTelediskoTokenCall;
+
+  constructor(call: SetTelediskoTokenCall) {
+    this._call = call;
+  }
+
+  get telediskoToken(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetTelediskoTokenCall__Outputs {
+  _call: SetTelediskoTokenCall;
+
+  constructor(call: SetTelediskoTokenCall) {
+    this._call = call;
+  }
+}
+
+export class SetVotingCall extends ethereum.Call {
+  get inputs(): SetVotingCall__Inputs {
+    return new SetVotingCall__Inputs(this);
+  }
+
+  get outputs(): SetVotingCall__Outputs {
+    return new SetVotingCall__Outputs(this);
+  }
+}
+
+export class SetVotingCall__Inputs {
+  _call: SetVotingCall;
+
+  constructor(call: SetVotingCall) {
+    this._call = call;
+  }
+
+  get voting(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetVotingCall__Outputs {
+  _call: SetVotingCall;
+
+  constructor(call: SetVotingCall) {
+    this._call = call;
   }
 }
 
@@ -516,12 +741,50 @@ export class UpdateResolutionCall__Inputs {
   get resolutionTypeId(): BigInt {
     return this._call.inputValues[2].value.toBigInt();
   }
+
+  get isNegative(): boolean {
+    return this._call.inputValues[3].value.toBoolean();
+  }
 }
 
 export class UpdateResolutionCall__Outputs {
   _call: UpdateResolutionCall;
 
   constructor(call: UpdateResolutionCall) {
+    this._call = call;
+  }
+}
+
+export class VoteCall extends ethereum.Call {
+  get inputs(): VoteCall__Inputs {
+    return new VoteCall__Inputs(this);
+  }
+
+  get outputs(): VoteCall__Outputs {
+    return new VoteCall__Outputs(this);
+  }
+}
+
+export class VoteCall__Inputs {
+  _call: VoteCall;
+
+  constructor(call: VoteCall) {
+    this._call = call;
+  }
+
+  get resolutionId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get isYes(): boolean {
+    return this._call.inputValues[1].value.toBoolean();
+  }
+}
+
+export class VoteCall__Outputs {
+  _call: VoteCall;
+
+  constructor(call: VoteCall) {
     this._call = call;
   }
 }

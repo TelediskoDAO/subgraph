@@ -3,11 +3,12 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: ResolutionMock
+    name: ResolutionManager
     network: rinkeby
     source:
-      address: "0xdc2d881555E21A7E09BF96F8Fa1deD6304724833"
-      abi: ResolutionMock
+      address: "0xE84aCBE831EE9A435a9864F53DF3C8beb84ce0f6"
+      abi: ResolutionManager
+      startBlock: 10172954
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -19,8 +20,8 @@ dataSources:
         - ResolutionUpdated
         - ResolutionVoted
       abis:
-        - name: ResolutionMock
-          file: ./abis/ResolutionMock.json
+        - name: ResolutionManager
+          file: ./abis/ResolutionManager.json
       eventHandlers:
         - event: DelegateLostVotingPower(indexed address,indexed uint256,uint256)
           handler: handleDelegateLostVotingPower

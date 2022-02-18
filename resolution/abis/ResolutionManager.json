@@ -1,5 +1,25 @@
 [
-  { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IShareholderRegistry",
+        "name": "shareholderRegistry",
+        "type": "address"
+      },
+      {
+        "internalType": "contract ITelediskoToken",
+        "name": "telediskoToken",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IVoting",
+        "name": "voting",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
   {
     "anonymous": false,
     "inputs": [
@@ -124,7 +144,6 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "resolutionId", "type": "uint256" },
       { "internalType": "string", "name": "dataURI", "type": "string" },
       {
         "internalType": "uint256",
@@ -136,6 +155,57 @@
     "name": "createResolution",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "resolutionId", "type": "uint256" }
+    ],
+    "name": "getResolutionResult",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getResolutionTypes",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "string", "name": "name", "type": "string" },
+          { "internalType": "uint256", "name": "quorum", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "noticePeriod",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "votingPeriod",
+            "type": "uint256"
+          },
+          { "internalType": "bool", "name": "canBeNegative", "type": "bool" }
+        ],
+        "internalType": "struct ResolutionManager.ResolutionType[7]",
+        "name": "",
+        "type": "tuple[7]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "resolutionId", "type": "uint256" },
+      { "internalType": "address", "name": "voter", "type": "address" }
+    ],
+    "name": "getVoterVote",
+    "outputs": [
+      { "internalType": "bool", "name": "isYes", "type": "bool" },
+      { "internalType": "bool", "name": "hasVoted", "type": "bool" },
+      { "internalType": "uint256", "name": "votingPower", "type": "uint256" }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -168,11 +238,48 @@
       },
       { "internalType": "uint256", "name": "snapshotId", "type": "uint256" },
       { "internalType": "uint256", "name": "yesVotesTotal", "type": "uint256" },
-      { "internalType": "bool", "name": "isNegative", "type": "bool" },
-      { "internalType": "bool", "name": "isPreDraft", "type": "bool" },
-      { "internalType": "bool", "name": "isCreated", "type": "bool" }
+      { "internalType": "bool", "name": "isNegative", "type": "bool" }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IShareholderRegistry",
+        "name": "shareholderRegistry",
+        "type": "address"
+      }
+    ],
+    "name": "setShareholderRegistry",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract ITelediskoToken",
+        "name": "telediskoToken",
+        "type": "address"
+      }
+    ],
+    "name": "setTelediskoToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IVoting",
+        "name": "voting",
+        "type": "address"
+      }
+    ],
+    "name": "setVoting",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -190,9 +297,20 @@
         "internalType": "uint256",
         "name": "resolutionTypeId",
         "type": "uint256"
-      }
+      },
+      { "internalType": "bool", "name": "isNegative", "type": "bool" }
     ],
     "name": "updateResolution",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "resolutionId", "type": "uint256" },
+      { "internalType": "bool", "name": "isYes", "type": "bool" }
+    ],
+    "name": "vote",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
