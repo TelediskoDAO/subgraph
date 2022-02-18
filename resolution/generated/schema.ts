@@ -16,6 +16,7 @@ export class Resolution extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
+    this.set("ipfsDataURI", Value.fromString(""));
     this.set("isNegative", Value.fromBoolean(false));
     this.set("yesVotesTotal", Value.fromBigInt(BigInt.zero()));
     this.set("typeId", Value.fromBigInt(BigInt.zero()));
@@ -48,6 +49,15 @@ export class Resolution extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get ipfsDataURI(): string {
+    let value = this.get("ipfsDataURI");
+    return value!.toString();
+  }
+
+  set ipfsDataURI(value: string) {
+    this.set("ipfsDataURI", Value.fromString(value));
   }
 
   get title(): string | null {

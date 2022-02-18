@@ -1,4 +1,4 @@
-import { BigInt, Bytes, ipfs, json, log } from '@graphprotocol/graph-ts';
+import { Bytes, ipfs, json, log } from '@graphprotocol/graph-ts';
 
 import { Resolution } from '../generated/schema';
 import { ResolutionManager__resolutionsResult } from '../generated/ResolutionManager/ResolutionManager';
@@ -11,27 +11,30 @@ import {
 } from "../generated/ResolutionManager/ResolutionManager"
 
 const setValuesFromResolutionContract = (resolutionEntity: Resolution, blockChainResolution: ResolutionManager__resolutionsResult): void => {
+  const ipfsDataURI = blockChainResolution.value0
+
   resolutionEntity.typeId = blockChainResolution.value1
   resolutionEntity.yesVotesTotal = blockChainResolution.value4
   resolutionEntity.isNegative = blockChainResolution.value5
-
-  const ipfsDataURI = blockChainResolution.value0
+  resolutionEntity.ipfsDataURI = ipfsDataURI
 
   // get other resolution data living on ipfs
-  const ipfsData = json.fromBytes(ipfs.cat(ipfsDataURI) as Bytes).toObject()
-  if (ipfsData) {  
-    const title = ipfsData.get('title')
-    const content = ipfsData.get('content')
-    if (title) {
-      resolutionEntity.title = title.toString()
-    }
-    if (content) {
-      resolutionEntity.content = content.toString()
-    }
-  } else {
-    log.error('No ipfs data found for resolution {} with ipfsDataURI {}', [resolutionEntity.id, ipfsDataURI])
+  const ipfsRawData = ipfs.cat(ipfsDataURI)
+  if (!ipfsRawData) {
+    log.error('No ipfs raw data found for resolution {} with ipfsDataURI {}', [resolutionEntity.id, ipfsDataURI])
+    resolutionEntity.save()
+    return
   }
 
+  const ipfsData = json.fromBytes(ipfsRawData as Bytes).toObject()
+  const title = ipfsData.get('title')
+  const content = ipfsData.get('content')
+  if (title) {
+    resolutionEntity.title = title.toString()
+  }
+  if (content) {
+    resolutionEntity.content = content.toString()
+  }
   resolutionEntity.save()
 }
 
@@ -54,9 +57,14 @@ export function handleResolutionCreated(event: ResolutionCreated): void {
   const resolutionManager = ResolutionManager.bind(event.address)
   const resolutionIdStringified = event.params.resolutionId.toString()
   const resolutionEntity = new Resolution(resolutionIdStringified)
-  resolutionEntity.createTimestamp = event.block.timestamp
-
-  setValuesFromResolutionContract(resolutionEntity, resolutionManager.resolutions(event.params.resolutionId))
+  const blockChainResolution = resolutionManager.resolutions(event.params.resolutionId)
+  if (blockChainResolution) {
+    resolutionEntity.createTimestamp = event.block.timestamp
+  
+    setValuesFromResolutionContract(resolutionEntity, blockChainResolution)
+    return
+  }
+  log.error('No blockchain resolution found {}', [resolutionIdStringified])
 }
 
 export function handleResolutionUpdated(event: ResolutionUpdated): void {

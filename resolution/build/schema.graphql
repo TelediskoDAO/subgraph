@@ -1,5 +1,6 @@
 type Resolution @entity {
   id: ID!
+  ipfsDataURI: String!
   title: String
   content: String
   isNegative: Boolean!
