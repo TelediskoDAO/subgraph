@@ -15,7 +15,6 @@ const setValuesFromResolutionContract = (resolutionEntity: Resolution, blockChai
   resolutionEntity.yesVotesTotal = blockChainResolution.value4
   resolutionEntity.isNegative = blockChainResolution.value5
 
-
   const ipfsDataURI = blockChainResolution.value0
 
   // get other resolution data living on ipfs
@@ -55,7 +54,7 @@ export function handleResolutionCreated(event: ResolutionCreated): void {
   const resolutionManager = ResolutionManager.bind(event.address)
   const resolutionIdStringified = event.params.resolutionId.toString()
   const resolutionEntity = new Resolution(resolutionIdStringified)
-  resolutionEntity.createTimestamp = BigInt.fromI64(Date.now())
+  resolutionEntity.createTimestamp = event.block.timestamp
 
   setValuesFromResolutionContract(resolutionEntity, resolutionManager.resolutions(event.params.resolutionId))
 }
@@ -66,7 +65,7 @@ export function handleResolutionUpdated(event: ResolutionUpdated): void {
   const resolutionEntity = Resolution.load(resolutionIdStringified)
 
   if (resolutionEntity) {
-    resolutionEntity.updateTimestamp = BigInt.fromI64(Date.now())
+    resolutionEntity.updateTimestamp = event.block.timestamp
     setValuesFromResolutionContract(resolutionEntity, resolutionManager.resolutions(event.params.resolutionId))
     return
   }
