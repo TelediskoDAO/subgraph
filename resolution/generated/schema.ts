@@ -17,9 +17,11 @@ export class Resolution extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("isNegative", Value.fromBoolean(false));
-    this.set("approveTimestamp", Value.fromBigInt(BigInt.zero()));
     this.set("yesVotesTotal", Value.fromBigInt(BigInt.zero()));
     this.set("typeId", Value.fromBigInt(BigInt.zero()));
+    this.set("approveTimestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("createTimestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("updateTimestamp", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -91,15 +93,6 @@ export class Resolution extends Entity {
     this.set("isNegative", Value.fromBoolean(value));
   }
 
-  get approveTimestamp(): BigInt {
-    let value = this.get("approveTimestamp");
-    return value!.toBigInt();
-  }
-
-  set approveTimestamp(value: BigInt) {
-    this.set("approveTimestamp", Value.fromBigInt(value));
-  }
-
   get yesVotesTotal(): BigInt {
     let value = this.get("yesVotesTotal");
     return value!.toBigInt();
@@ -116,5 +109,32 @@ export class Resolution extends Entity {
 
   set typeId(value: BigInt) {
     this.set("typeId", Value.fromBigInt(value));
+  }
+
+  get approveTimestamp(): BigInt {
+    let value = this.get("approveTimestamp");
+    return value!.toBigInt();
+  }
+
+  set approveTimestamp(value: BigInt) {
+    this.set("approveTimestamp", Value.fromBigInt(value));
+  }
+
+  get createTimestamp(): BigInt {
+    let value = this.get("createTimestamp");
+    return value!.toBigInt();
+  }
+
+  set createTimestamp(value: BigInt) {
+    this.set("createTimestamp", Value.fromBigInt(value));
+  }
+
+  get updateTimestamp(): BigInt {
+    let value = this.get("updateTimestamp");
+    return value!.toBigInt();
+  }
+
+  set updateTimestamp(value: BigInt) {
+    this.set("updateTimestamp", Value.fromBigInt(value));
   }
 }

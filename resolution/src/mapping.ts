@@ -1,6 +1,7 @@
 import { BigInt, Bytes, ipfs, json, log } from '@graphprotocol/graph-ts';
 
 import { Resolution } from '../generated/schema';
+import { ResolutionManager__resolutionsResult } from '../generated/ResolutionManager/ResolutionManager';
 import {
   ResolutionManager,
   ResolutionApproved,
@@ -9,19 +10,13 @@ import {
   ResolutionVoted
 } from "../generated/ResolutionManager/ResolutionManager"
 
-const setValuesFromResolutionContract = (resolutionManager: ResolutionManager, resolutionId: BigInt): void => {
-  const resolutionIdStringified = resolutionId.toString()
-  const resolutionEntity = (Resolution.load(resolutionIdStringified) || new Resolution(resolutionIdStringified)) as Resolution
-  
-  // get resolution data from the blockchain
-  const currentResolution = resolutionManager.resolutions(resolutionId)
+const setValuesFromResolutionContract = (resolutionEntity: Resolution, blockChainResolution: ResolutionManager__resolutionsResult): void => {
+  resolutionEntity.typeId = blockChainResolution.value1
+  resolutionEntity.yesVotesTotal = blockChainResolution.value4
+  resolutionEntity.isNegative = blockChainResolution.value5
 
-  const ipfsDataURI = currentResolution.value0
 
-  resolutionEntity.typeId = currentResolution.value1
-  resolutionEntity.approveTimestamp = currentResolution.value2
-  resolutionEntity.yesVotesTotal = currentResolution.value4
-  resolutionEntity.isNegative = currentResolution.value5
+  const ipfsDataURI = blockChainResolution.value0
 
   // get other resolution data living on ipfs
   const ipfsData = json.fromBytes(ipfs.cat(ipfsDataURI) as Bytes).toObject()
@@ -35,7 +30,7 @@ const setValuesFromResolutionContract = (resolutionManager: ResolutionManager, r
       resolutionEntity.content = content.toString()
     }
   } else {
-    log.error('No ipfs data found for resolution {} with ipfsDataURI {}', [resolutionIdStringified, ipfsDataURI])
+    log.error('No ipfs data found for resolution {} with ipfsDataURI {}', [resolutionEntity.id, ipfsDataURI])
   }
 
   resolutionEntity.save()
@@ -43,22 +38,40 @@ const setValuesFromResolutionContract = (resolutionManager: ResolutionManager, r
 
 export function handleResolutionApproved(event: ResolutionApproved): void {
   const resolutionManager = ResolutionManager.bind(event.address)
-  const currentResolution = resolutionManager.resolutions(event.params.resolutionId)
-  const approveTimestamp = currentResolution.value2
-  const resolutionEntity = Resolution.load(event.params.resolutionId.toString())
+  const resolutionIdStringified = event.params.resolutionId.toString()
+  const resolutionEntity = Resolution.load(resolutionIdStringified)
 
   if (resolutionEntity) {
-    resolutionEntity.approveTimestamp = approveTimestamp
+    const blockChainResolution = resolutionManager.resolutions(event.params.resolutionId)
+    resolutionEntity.approveTimestamp = blockChainResolution.value2
     resolutionEntity.save()
+    return
   }
+
+  log.error('Trying to approve non-existing resolution {}', [resolutionIdStringified])
 }
 
 export function handleResolutionCreated(event: ResolutionCreated): void {
-  setValuesFromResolutionContract(ResolutionManager.bind(event.address), event.params.resolutionId)
+  const resolutionManager = ResolutionManager.bind(event.address)
+  const resolutionIdStringified = event.params.resolutionId.toString()
+  const resolutionEntity = new Resolution(resolutionIdStringified)
+  resolutionEntity.createTimestamp = BigInt.fromI64(Date.now())
+
+  setValuesFromResolutionContract(resolutionEntity, resolutionManager.resolutions(event.params.resolutionId))
 }
 
 export function handleResolutionUpdated(event: ResolutionUpdated): void {
-  setValuesFromResolutionContract(ResolutionManager.bind(event.address), event.params.resolutionId)
+  const resolutionManager = ResolutionManager.bind(event.address)
+  const resolutionIdStringified = event.params.resolutionId.toString()
+  const resolutionEntity = Resolution.load(resolutionIdStringified)
+
+  if (resolutionEntity) {
+    resolutionEntity.updateTimestamp = BigInt.fromI64(Date.now())
+    setValuesFromResolutionContract(resolutionEntity, resolutionManager.resolutions(event.params.resolutionId))
+    return
+  }
+
+  log.error('Trying to update non-existing resolution {}', [resolutionIdStringified])
 }
 
 export function handleResolutionVoted(event: ResolutionVoted): void {}
