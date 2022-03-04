@@ -80,6 +80,28 @@ export class ResolutionCreated__Params {
   }
 }
 
+export class ResolutionTypeCreated extends ethereum.Event {
+  get params(): ResolutionTypeCreated__Params {
+    return new ResolutionTypeCreated__Params(this);
+  }
+}
+
+export class ResolutionTypeCreated__Params {
+  _event: ResolutionTypeCreated;
+
+  constructor(event: ResolutionTypeCreated) {
+    this._event = event;
+  }
+
+  get from(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get typeIndex(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
 export class ResolutionUpdated extends ethereum.Event {
   get params(): ResolutionUpdated__Params {
     return new ResolutionUpdated__Params(this);
@@ -132,25 +154,81 @@ export class ResolutionVoted__Params {
   }
 }
 
-export class ResolutionManager__getResolutionTypesResultValue0Struct extends ethereum.Tuple {
-  get name(): string {
-    return this[0].toString();
+export class RoleAdminChanged extends ethereum.Event {
+  get params(): RoleAdminChanged__Params {
+    return new RoleAdminChanged__Params(this);
+  }
+}
+
+export class RoleAdminChanged__Params {
+  _event: RoleAdminChanged;
+
+  constructor(event: RoleAdminChanged) {
+    this._event = event;
   }
 
-  get quorum(): BigInt {
-    return this[1].toBigInt();
+  get role(): Bytes {
+    return this._event.parameters[0].value.toBytes();
   }
 
-  get noticePeriod(): BigInt {
-    return this[2].toBigInt();
+  get previousAdminRole(): Bytes {
+    return this._event.parameters[1].value.toBytes();
   }
 
-  get votingPeriod(): BigInt {
-    return this[3].toBigInt();
+  get newAdminRole(): Bytes {
+    return this._event.parameters[2].value.toBytes();
+  }
+}
+
+export class RoleGranted extends ethereum.Event {
+  get params(): RoleGranted__Params {
+    return new RoleGranted__Params(this);
+  }
+}
+
+export class RoleGranted__Params {
+  _event: RoleGranted;
+
+  constructor(event: RoleGranted) {
+    this._event = event;
   }
 
-  get canBeNegative(): boolean {
-    return this[4].toBoolean();
+  get role(): Bytes {
+    return this._event.parameters[0].value.toBytes();
+  }
+
+  get account(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get sender(): Address {
+    return this._event.parameters[2].value.toAddress();
+  }
+}
+
+export class RoleRevoked extends ethereum.Event {
+  get params(): RoleRevoked__Params {
+    return new RoleRevoked__Params(this);
+  }
+}
+
+export class RoleRevoked__Params {
+  _event: RoleRevoked;
+
+  constructor(event: RoleRevoked) {
+    this._event = event;
+  }
+
+  get role(): Bytes {
+    return this._event.parameters[0].value.toBytes();
+  }
+
+  get account(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get sender(): Address {
+    return this._event.parameters[2].value.toAddress();
   }
 }
 
@@ -247,6 +325,29 @@ export class ResolutionManager extends ethereum.SmartContract {
     return new ResolutionManager("ResolutionManager", address);
   }
 
+  DEFAULT_ADMIN_ROLE(): Bytes {
+    let result = super.call(
+      "DEFAULT_ADMIN_ROLE",
+      "DEFAULT_ADMIN_ROLE():(bytes32)",
+      []
+    );
+
+    return result[0].toBytes();
+  }
+
+  try_DEFAULT_ADMIN_ROLE(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "DEFAULT_ADMIN_ROLE",
+      "DEFAULT_ADMIN_ROLE():(bytes32)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
   createResolution(
     dataURI: string,
     resolutionTypeId: BigInt,
@@ -309,37 +410,25 @@ export class ResolutionManager extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  getResolutionTypes(): Array<
-    ResolutionManager__getResolutionTypesResultValue0Struct
-  > {
-    let result = super.call(
-      "getResolutionTypes",
-      "getResolutionTypes():((string,uint256,uint256,uint256,bool)[7])",
-      []
-    );
+  getRoleAdmin(role: Bytes): Bytes {
+    let result = super.call("getRoleAdmin", "getRoleAdmin(bytes32):(bytes32)", [
+      ethereum.Value.fromFixedBytes(role)
+    ]);
 
-    return result[0].toTupleArray<
-      ResolutionManager__getResolutionTypesResultValue0Struct
-    >();
+    return result[0].toBytes();
   }
 
-  try_getResolutionTypes(): ethereum.CallResult<
-    Array<ResolutionManager__getResolutionTypesResultValue0Struct>
-  > {
+  try_getRoleAdmin(role: Bytes): ethereum.CallResult<Bytes> {
     let result = super.tryCall(
-      "getResolutionTypes",
-      "getResolutionTypes():((string,uint256,uint256,uint256,bool)[7])",
-      []
+      "getRoleAdmin",
+      "getRoleAdmin(bytes32):(bytes32)",
+      [ethereum.Value.fromFixedBytes(role)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(
-      value[0].toTupleArray<
-        ResolutionManager__getResolutionTypesResultValue0Struct
-      >()
-    );
+    return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
   getVoterVote(
@@ -385,6 +474,27 @@ export class ResolutionManager extends ethereum.SmartContract {
         value[2].toBigInt()
       )
     );
+  }
+
+  hasRole(role: Bytes, account: Address): boolean {
+    let result = super.call("hasRole", "hasRole(bytes32,address):(bool)", [
+      ethereum.Value.fromFixedBytes(role),
+      ethereum.Value.fromAddress(account)
+    ]);
+
+    return result[0].toBoolean();
+  }
+
+  try_hasRole(role: Bytes, account: Address): ethereum.CallResult<boolean> {
+    let result = super.tryCall("hasRole", "hasRole(bytes32,address):(bool)", [
+      ethereum.Value.fromFixedBytes(role),
+      ethereum.Value.fromAddress(account)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
   resolutionTypes(param0: BigInt): ResolutionManager__resolutionTypesResult {
@@ -467,19 +577,27 @@ export class ResolutionManager extends ethereum.SmartContract {
     );
   }
 
-  snapshotAll(): BigInt {
-    let result = super.call("snapshotAll", "snapshotAll():(uint256)", []);
+  supportsInterface(interfaceId: Bytes): boolean {
+    let result = super.call(
+      "supportsInterface",
+      "supportsInterface(bytes4):(bool)",
+      [ethereum.Value.fromFixedBytes(interfaceId)]
+    );
 
-    return result[0].toBigInt();
+    return result[0].toBoolean();
   }
 
-  try_snapshotAll(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("snapshotAll", "snapshotAll():(uint256)", []);
+  try_supportsInterface(interfaceId: Bytes): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "supportsInterface",
+      "supportsInterface(bytes4):(bool)",
+      [ethereum.Value.fromFixedBytes(interfaceId)]
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 }
 
@@ -517,6 +635,52 @@ export class ConstructorCall__Outputs {
   _call: ConstructorCall;
 
   constructor(call: ConstructorCall) {
+    this._call = call;
+  }
+}
+
+export class AddResolutionTypeCall extends ethereum.Call {
+  get inputs(): AddResolutionTypeCall__Inputs {
+    return new AddResolutionTypeCall__Inputs(this);
+  }
+
+  get outputs(): AddResolutionTypeCall__Outputs {
+    return new AddResolutionTypeCall__Outputs(this);
+  }
+}
+
+export class AddResolutionTypeCall__Inputs {
+  _call: AddResolutionTypeCall;
+
+  constructor(call: AddResolutionTypeCall) {
+    this._call = call;
+  }
+
+  get name(): string {
+    return this._call.inputValues[0].value.toString();
+  }
+
+  get quorum(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+
+  get noticePeriod(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+
+  get votingPeriod(): BigInt {
+    return this._call.inputValues[3].value.toBigInt();
+  }
+
+  get canBeNegative(): boolean {
+    return this._call.inputValues[4].value.toBoolean();
+  }
+}
+
+export class AddResolutionTypeCall__Outputs {
+  _call: AddResolutionTypeCall;
+
+  constructor(call: AddResolutionTypeCall) {
     this._call = call;
   }
 }
@@ -590,6 +754,108 @@ export class CreateResolutionCall__Outputs {
 
   get value0(): BigInt {
     return this._call.outputValues[0].value.toBigInt();
+  }
+}
+
+export class GrantRoleCall extends ethereum.Call {
+  get inputs(): GrantRoleCall__Inputs {
+    return new GrantRoleCall__Inputs(this);
+  }
+
+  get outputs(): GrantRoleCall__Outputs {
+    return new GrantRoleCall__Outputs(this);
+  }
+}
+
+export class GrantRoleCall__Inputs {
+  _call: GrantRoleCall;
+
+  constructor(call: GrantRoleCall) {
+    this._call = call;
+  }
+
+  get role(): Bytes {
+    return this._call.inputValues[0].value.toBytes();
+  }
+
+  get account(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class GrantRoleCall__Outputs {
+  _call: GrantRoleCall;
+
+  constructor(call: GrantRoleCall) {
+    this._call = call;
+  }
+}
+
+export class RenounceRoleCall extends ethereum.Call {
+  get inputs(): RenounceRoleCall__Inputs {
+    return new RenounceRoleCall__Inputs(this);
+  }
+
+  get outputs(): RenounceRoleCall__Outputs {
+    return new RenounceRoleCall__Outputs(this);
+  }
+}
+
+export class RenounceRoleCall__Inputs {
+  _call: RenounceRoleCall;
+
+  constructor(call: RenounceRoleCall) {
+    this._call = call;
+  }
+
+  get role(): Bytes {
+    return this._call.inputValues[0].value.toBytes();
+  }
+
+  get account(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class RenounceRoleCall__Outputs {
+  _call: RenounceRoleCall;
+
+  constructor(call: RenounceRoleCall) {
+    this._call = call;
+  }
+}
+
+export class RevokeRoleCall extends ethereum.Call {
+  get inputs(): RevokeRoleCall__Inputs {
+    return new RevokeRoleCall__Inputs(this);
+  }
+
+  get outputs(): RevokeRoleCall__Outputs {
+    return new RevokeRoleCall__Outputs(this);
+  }
+}
+
+export class RevokeRoleCall__Inputs {
+  _call: RevokeRoleCall;
+
+  constructor(call: RevokeRoleCall) {
+    this._call = call;
+  }
+
+  get role(): Bytes {
+    return this._call.inputValues[0].value.toBytes();
+  }
+
+  get account(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class RevokeRoleCall__Outputs {
+  _call: RevokeRoleCall;
+
+  constructor(call: RevokeRoleCall) {
+    this._call = call;
   }
 }
 
@@ -680,36 +946,6 @@ export class SetVotingCall__Outputs {
 
   constructor(call: SetVotingCall) {
     this._call = call;
-  }
-}
-
-export class SnapshotAllCall extends ethereum.Call {
-  get inputs(): SnapshotAllCall__Inputs {
-    return new SnapshotAllCall__Inputs(this);
-  }
-
-  get outputs(): SnapshotAllCall__Outputs {
-    return new SnapshotAllCall__Outputs(this);
-  }
-}
-
-export class SnapshotAllCall__Inputs {
-  _call: SnapshotAllCall;
-
-  constructor(call: SnapshotAllCall) {
-    this._call = call;
-  }
-}
-
-export class SnapshotAllCall__Outputs {
-  _call: SnapshotAllCall;
-
-  constructor(call: SnapshotAllCall) {
-    this._call = call;
-  }
-
-  get value0(): BigInt {
-    return this._call.outputValues[0].value.toBigInt();
   }
 }
 

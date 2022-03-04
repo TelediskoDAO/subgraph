@@ -1,3 +1,18 @@
+type ResolutionVoter @entity {
+  id: ID!
+  votingPower: BigInt!
+  address: Bytes!
+}
+
+type ResolutionType @entity {
+  id: ID!
+  name: String!
+  quorum: BigInt!
+  noticePeriod: BigInt!
+  votingPeriod: BigInt!
+  canBeNegative: Boolean!
+}
+
 type Resolution @entity {
   id: ID!
   ipfsDataURI: String!
@@ -5,8 +20,16 @@ type Resolution @entity {
   content: String
   isNegative: Boolean!
   yesVotesTotal: BigInt!
-  typeId: BigInt!
+  resolutionType: ResolutionType!
   approveTimestamp: BigInt!
   createTimestamp: BigInt!
   updateTimestamp: BigInt!
+  createBy: Bytes! 
+  voters: [ResolutionVoter!]!
+}
+
+type ResolutionManager @entity {
+  id: ID!
+  votersAddresses: [Bytes!]!
+  resolutionTypes: [ResolutionType!]!
 }
