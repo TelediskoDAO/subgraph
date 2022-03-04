@@ -95,6 +95,25 @@
       {
         "indexed": true,
         "internalType": "uint256",
+        "name": "typeIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "ResolutionTypeCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
         "name": "resolutionId",
         "type": "uint256"
       }
@@ -132,6 +151,127 @@
     ],
     "name": "ResolutionVoted",
     "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "previousAdminRole",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "newAdminRole",
+        "type": "bytes32"
+      }
+    ],
+    "name": "RoleAdminChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "RoleGranted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "RoleRevoked",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "DEFAULT_ADMIN_ROLE",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "quorum",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "noticePeriod",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "votingPeriod",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "canBeNegative",
+        "type": "bool"
+      }
+    ],
+    "name": "addResolutionType",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "inputs": [
@@ -195,40 +335,19 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "getResolutionTypes",
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getRoleAdmin",
     "outputs": [
       {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "name",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "quorum",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "noticePeriod",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "votingPeriod",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bool",
-            "name": "canBeNegative",
-            "type": "bool"
-          }
-        ],
-        "internalType": "struct ResolutionManager.ResolutionType[7]",
+        "internalType": "bytes32",
         "name": "",
-        "type": "tuple[7]"
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -266,6 +385,66 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "grantRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "hasRole",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "renounceRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -354,6 +533,24 @@
   {
     "inputs": [
       {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "revokeRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "contract IShareholderRegistry",
         "name": "shareholderRegistry",
         "type": "address"
@@ -391,16 +588,22 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "snapshotAll",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        "internalType": "bytes4",
+        "name": "interfaceId",
+        "type": "bytes4"
       }
     ],
-    "stateMutability": "nonpayable",
+    "name": "supportsInterface",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
