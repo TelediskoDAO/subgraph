@@ -74,7 +74,7 @@ export function handleResolutionCreated(event: ResolutionCreated): void {
   for (let index = 0; index < resolutionManagerEntity.contributorsAddresses.length; index++) {
     const voterAddress = resolutionManagerEntity.contributorsAddresses[index];
     const result = resolutionManager.try_getVoterVote(event.params.resolutionId, Address.fromString(voterAddress.toHex()))
-    if (result) {
+    if (!result.reverted) {
       const resolutionVoter = new ResolutionVoter(resolutionIdStringified + '-' + voterAddress.toHexString())
       resolutionVoter.votingPower = result.value.value2
       resolutionVoter.address = voterAddress
