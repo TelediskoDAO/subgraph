@@ -312,7 +312,7 @@ export class ResolutionManager extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("votersAddresses", Value.fromBytesArray(new Array(0)));
+    this.set("contributorsAddresses", Value.fromBytesArray(new Array(0)));
     this.set("resolutionTypes", Value.fromStringArray(new Array(0)));
   }
 
@@ -344,13 +344,13 @@ export class ResolutionManager extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get votersAddresses(): Array<Bytes> {
-    let value = this.get("votersAddresses");
+  get contributorsAddresses(): Array<Bytes> {
+    let value = this.get("contributorsAddresses");
     return value!.toBytesArray();
   }
 
-  set votersAddresses(value: Array<Bytes>) {
-    this.set("votersAddresses", Value.fromBytesArray(value));
+  set contributorsAddresses(value: Array<Bytes>) {
+    this.set("contributorsAddresses", Value.fromBytesArray(value));
   }
 
   get resolutionTypes(): Array<string> {

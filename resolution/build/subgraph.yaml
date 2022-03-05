@@ -38,26 +38,6 @@ dataSources:
           handler: handleResolutionTypeCreated
       file: ResolutionManager/ResolutionManager.wasm
   - kind: ethereum
-    name: Voting
-    network: rinkeby
-    source:
-      address: "0x698B17b48dCcfE5D82aa287B0b87bfFBD796CAE2"
-      abi: Voting
-      startBlock: 10269461
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - DelegateChanged
-      abis:
-        - name: Voting
-          file: Voting/abis/Voting.json
-      eventHandlers:
-        - event: DelegateChanged(indexed address,address,address)
-          handler: handleDelegateChanged
-      file: Voting/Voting.wasm
-  - kind: ethereum
     name: ShareholderRegistry
     network: rinkeby
     source:
@@ -69,20 +49,11 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - RoleAdminChanged
-        - RoleGranted
-        - RoleRevoked
         - StatusChanged
       abis:
         - name: ShareholderRegistry
           file: ShareholderRegistry/abis/ShareholderRegistry.json
       eventHandlers:
-        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
-          handler: handleRoleAdminChanged
-        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
-          handler: handleRoleGranted
-        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
-          handler: handleRoleRevoked
         - event: StatusChanged(indexed address,bytes32,bytes32)
           handler: handleStatusChanged
       file: ShareholderRegistry/ShareholderRegistry.wasm

@@ -30,6 +30,6 @@ type Resolution @entity {
 
 type ResolutionManager @entity {
   id: ID!
-  votersAddresses: [Bytes!]!
+  contributorsAddresses: [Bytes!]!
   resolutionTypes: [ResolutionType!]!
 }
