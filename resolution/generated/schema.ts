@@ -158,9 +158,9 @@ export class Resolution extends Entity {
     this.set("isNegative", Value.fromBoolean(false));
     this.set("yesVotesTotal", Value.fromBigInt(BigInt.zero()));
     this.set("resolutionType", Value.fromString(""));
-    this.set("approveTimestamp", Value.fromBigInt(BigInt.zero()));
     this.set("createTimestamp", Value.fromBigInt(BigInt.zero()));
     this.set("updateTimestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("approveTimestamp", Value.fromBigInt(BigInt.zero()));
     this.set("createBy", Value.fromBytes(Bytes.empty()));
     this.set("voters", Value.fromStringArray(new Array(0)));
   }
@@ -261,15 +261,6 @@ export class Resolution extends Entity {
     this.set("resolutionType", Value.fromString(value));
   }
 
-  get approveTimestamp(): BigInt {
-    let value = this.get("approveTimestamp");
-    return value!.toBigInt();
-  }
-
-  set approveTimestamp(value: BigInt) {
-    this.set("approveTimestamp", Value.fromBigInt(value));
-  }
-
   get createTimestamp(): BigInt {
     let value = this.get("createTimestamp");
     return value!.toBigInt();
@@ -288,6 +279,15 @@ export class Resolution extends Entity {
     this.set("updateTimestamp", Value.fromBigInt(value));
   }
 
+  get approveTimestamp(): BigInt {
+    let value = this.get("approveTimestamp");
+    return value!.toBigInt();
+  }
+
+  set approveTimestamp(value: BigInt) {
+    this.set("approveTimestamp", Value.fromBigInt(value));
+  }
+
   get createBy(): Bytes {
     let value = this.get("createBy");
     return value!.toBytes();
@@ -295,6 +295,40 @@ export class Resolution extends Entity {
 
   set createBy(value: Bytes) {
     this.set("createBy", Value.fromBytes(value));
+  }
+
+  get updateBy(): Bytes | null {
+    let value = this.get("updateBy");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set updateBy(value: Bytes | null) {
+    if (!value) {
+      this.unset("updateBy");
+    } else {
+      this.set("updateBy", Value.fromBytes(<Bytes>value));
+    }
+  }
+
+  get approveBy(): Bytes | null {
+    let value = this.get("approveBy");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set approveBy(value: Bytes | null) {
+    if (!value) {
+      this.unset("approveBy");
+    } else {
+      this.set("approveBy", Value.fromBytes(<Bytes>value));
+    }
   }
 
   get voters(): Array<string> {

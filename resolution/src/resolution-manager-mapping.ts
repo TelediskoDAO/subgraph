@@ -69,6 +69,7 @@ export function handleResolutionApproved(event: ResolutionApproved): void {
 
     const blockChainResolution = resolutionManager.resolutions(event.params.resolutionId)
     resolutionEntity.approveTimestamp = blockChainResolution.value2
+    resolutionEntity.approveBy = event.transaction.from
     resolutionEntity.save()
     return
   }
@@ -100,6 +101,7 @@ export function handleResolutionUpdated(event: ResolutionUpdated): void {
   
   if (resolutionEntity) {
     resolutionEntity.updateTimestamp = event.block.timestamp
+    resolutionEntity.updateBy = event.transaction.from
     setValuesFromResolutionContract(resolutionEntity, resolutionManager.resolutions(event.params.resolutionId))
     return
   }

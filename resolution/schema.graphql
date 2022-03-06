@@ -21,10 +21,12 @@ type Resolution @entity {
   isNegative: Boolean!
   yesVotesTotal: BigInt!
   resolutionType: ResolutionType!
-  approveTimestamp: BigInt!
   createTimestamp: BigInt!
   updateTimestamp: BigInt!
-  createBy: Bytes! 
+  approveTimestamp: BigInt!
+  createBy: Bytes!
+  updateBy: Bytes
+  approveBy: Bytes
   voters: [ResolutionVoter!]!
 }
 
