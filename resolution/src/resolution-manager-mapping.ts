@@ -48,6 +48,25 @@ export function handleResolutionApproved(event: ResolutionApproved): void {
   const resolutionEntity = Resolution.load(resolutionIdStringified)
 
   if (resolutionEntity) {
+    const resolutionManagerEntity = getResolutionManagerEntity()
+    const possibleVotersIds: string[] = []
+
+    for (let index = 0; index < resolutionManagerEntity.contributorsAddresses.length; index++) {
+      const voterAddress = resolutionManagerEntity.contributorsAddresses[index];
+      const result = resolutionManager.try_getVoterVote(event.params.resolutionId, Address.fromString(voterAddress.toHex()))
+      if (!result.reverted) {
+        const resolutionVoter = new ResolutionVoter(resolutionIdStringified + '-' + voterAddress.toHexString())
+        resolutionVoter.votingPower = result.value.value2
+        resolutionVoter.address = voterAddress
+        resolutionVoter.save()
+        possibleVotersIds.push(resolutionVoter.id)
+      }
+    }
+
+    if (possibleVotersIds.length > 0) {
+      resolutionEntity.voters = possibleVotersIds
+    }
+
     const blockChainResolution = resolutionManager.resolutions(event.params.resolutionId)
     resolutionEntity.approveTimestamp = blockChainResolution.value2
     resolutionEntity.save()
@@ -61,31 +80,6 @@ export function handleResolutionCreated(event: ResolutionCreated): void {
   const resolutionManager = ResolutionManager.bind(event.address)
   const resolutionIdStringified = event.params.resolutionId.toString()
   const resolutionEntity = new Resolution(resolutionIdStringified)
-
-  const resolutionVoter = new ResolutionVoter(resolutionIdStringified + '-' + event.transaction.from.toHexString())
-  resolutionVoter.votingPower = BigInt.fromI32(12)
-  resolutionVoter.address = event.transaction.from
-  resolutionVoter.save()
-  resolutionEntity.voters = [resolutionVoter.id]
-
-  const resolutionManagerEntity = getResolutionManagerEntity()
-  const possibleVotersIds: string[] = []
-
-  for (let index = 0; index < resolutionManagerEntity.contributorsAddresses.length; index++) {
-    const voterAddress = resolutionManagerEntity.contributorsAddresses[index];
-    const result = resolutionManager.try_getVoterVote(event.params.resolutionId, Address.fromString(voterAddress.toHex()))
-    if (!result.reverted) {
-      const resolutionVoter = new ResolutionVoter(resolutionIdStringified + '-' + voterAddress.toHexString())
-      resolutionVoter.votingPower = result.value.value2
-      resolutionVoter.address = voterAddress
-      resolutionVoter.save()
-      possibleVotersIds.push(resolutionVoter.id)
-    }
-  }
-
-  if (possibleVotersIds.length > 0) {
-    resolutionEntity.voters = possibleVotersIds
-  }
 
   const blockChainResolution = resolutionManager.resolutions(event.params.resolutionId)
 

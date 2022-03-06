@@ -31,5 +31,8 @@ type Resolution @entity {
 type ResolutionManager @entity {
   id: ID!
   contributorsAddresses: [Bytes!]!
+  foundersAddresses: [Bytes!]!
+  shareholdersAddresses: [Bytes!]!
+  investorsAddresses: [Bytes!]!
   resolutionTypes: [ResolutionType!]!
 }

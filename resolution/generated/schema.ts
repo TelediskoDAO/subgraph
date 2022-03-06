@@ -313,6 +313,9 @@ export class ResolutionManager extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("contributorsAddresses", Value.fromBytesArray(new Array(0)));
+    this.set("foundersAddresses", Value.fromBytesArray(new Array(0)));
+    this.set("shareholdersAddresses", Value.fromBytesArray(new Array(0)));
+    this.set("investorsAddresses", Value.fromBytesArray(new Array(0)));
     this.set("resolutionTypes", Value.fromStringArray(new Array(0)));
   }
 
@@ -351,6 +354,33 @@ export class ResolutionManager extends Entity {
 
   set contributorsAddresses(value: Array<Bytes>) {
     this.set("contributorsAddresses", Value.fromBytesArray(value));
+  }
+
+  get foundersAddresses(): Array<Bytes> {
+    let value = this.get("foundersAddresses");
+    return value!.toBytesArray();
+  }
+
+  set foundersAddresses(value: Array<Bytes>) {
+    this.set("foundersAddresses", Value.fromBytesArray(value));
+  }
+
+  get shareholdersAddresses(): Array<Bytes> {
+    let value = this.get("shareholdersAddresses");
+    return value!.toBytesArray();
+  }
+
+  set shareholdersAddresses(value: Array<Bytes>) {
+    this.set("shareholdersAddresses", Value.fromBytesArray(value));
+  }
+
+  get investorsAddresses(): Array<Bytes> {
+    let value = this.get("investorsAddresses");
+    return value!.toBytesArray();
+  }
+
+  set investorsAddresses(value: Array<Bytes>) {
+    this.set("investorsAddresses", Value.fromBytesArray(value));
   }
 
   get resolutionTypes(): Array<string> {
