@@ -2,6 +2,8 @@ type ResolutionVoter @entity {
   id: ID!
   votingPower: BigInt!
   address: Bytes!
+  hasVoted: Boolean!
+  hasVotedYes: Boolean!
 }
 
 type ResolutionType @entity {
@@ -28,6 +30,7 @@ type Resolution @entity {
   updateBy: Bytes
   approveBy: Bytes
   voters: [ResolutionVoter!]!
+  hasQuorum: Boolean!
 }
 
 type ResolutionManager @entity {

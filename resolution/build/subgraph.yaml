@@ -23,6 +23,8 @@ dataSources:
       abis:
         - name: ResolutionManager
           file: ResolutionManager/abis/ResolutionManager.json
+        - name: Voting
+          file: ResolutionManager/abis/Voting.json
       eventHandlers:
         - event: DelegateLostVotingPower(indexed address,indexed uint256,uint256)
           handler: handleDelegateLostVotingPower
@@ -57,3 +59,23 @@ dataSources:
         - event: StatusChanged(indexed address,bytes32,bytes32)
           handler: handleStatusChanged
       file: ShareholderRegistry/ShareholderRegistry.wasm
+  - kind: ethereum
+    name: Voting
+    network: rinkeby
+    source:
+      address: "0x698B17b48dCcfE5D82aa287B0b87bfFBD796CAE2"
+      abi: Voting
+      startBlock: 10269461
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - DelegateChanged
+      abis:
+        - name: Voting
+          file: Voting/abis/Voting.json
+      eventHandlers:
+        - event: DelegateChanged(indexed address,address,address)
+          handler: handleDelegateChanged
+      file: Voting/Voting.wasm

@@ -18,6 +18,8 @@ export class ResolutionVoter extends Entity {
 
     this.set("votingPower", Value.fromBigInt(BigInt.zero()));
     this.set("address", Value.fromBytes(Bytes.empty()));
+    this.set("hasVoted", Value.fromBoolean(false));
+    this.set("hasVotedYes", Value.fromBoolean(false));
   }
 
   save(): void {
@@ -62,6 +64,24 @@ export class ResolutionVoter extends Entity {
 
   set address(value: Bytes) {
     this.set("address", Value.fromBytes(value));
+  }
+
+  get hasVoted(): boolean {
+    let value = this.get("hasVoted");
+    return value!.toBoolean();
+  }
+
+  set hasVoted(value: boolean) {
+    this.set("hasVoted", Value.fromBoolean(value));
+  }
+
+  get hasVotedYes(): boolean {
+    let value = this.get("hasVotedYes");
+    return value!.toBoolean();
+  }
+
+  set hasVotedYes(value: boolean) {
+    this.set("hasVotedYes", Value.fromBoolean(value));
   }
 }
 
@@ -163,6 +183,7 @@ export class Resolution extends Entity {
     this.set("approveTimestamp", Value.fromBigInt(BigInt.zero()));
     this.set("createBy", Value.fromBytes(Bytes.empty()));
     this.set("voters", Value.fromStringArray(new Array(0)));
+    this.set("hasQuorum", Value.fromBoolean(false));
   }
 
   save(): void {
@@ -338,6 +359,15 @@ export class Resolution extends Entity {
 
   set voters(value: Array<string>) {
     this.set("voters", Value.fromStringArray(value));
+  }
+
+  get hasQuorum(): boolean {
+    let value = this.get("hasQuorum");
+    return value!.toBoolean();
+  }
+
+  set hasQuorum(value: boolean) {
+    this.set("hasQuorum", Value.fromBoolean(value));
   }
 }
 

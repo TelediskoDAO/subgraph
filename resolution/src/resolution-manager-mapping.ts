@@ -1,7 +1,8 @@
-import { BigInt, Bytes, ipfs, json, log, Address } from '@graphprotocol/graph-ts';
+import { Bytes, ipfs, json, log, Address } from '@graphprotocol/graph-ts';
 
 import { Resolution, ResolutionManager as ResolutionManagerEntity, ResolutionVoter, ResolutionType } from '../generated/schema';
 import { ResolutionManager__resolutionsResult } from '../generated/ResolutionManager/ResolutionManager';
+import { Voting } from '../generated/Voting/Voting';
 import {
   ResolutionManager,
   ResolutionApproved,
@@ -12,6 +13,7 @@ import {
 } from "../generated/ResolutionManager/ResolutionManager"
 
 export const RESOLUTION_MANAGER_ID = '0'
+const VOTING_CONTRACT_ADDRESS = '0x698b17b48dccfe5d82aa287b0b87bffbd796cae2'
 
 const setValuesFromResolutionContract = (resolutionEntity: Resolution, blockChainResolution: ResolutionManager__resolutionsResult): void => {
   const ipfsDataURI = blockChainResolution.value0
@@ -58,8 +60,12 @@ export function handleResolutionApproved(event: ResolutionApproved): void {
         const resolutionVoter = new ResolutionVoter(resolutionIdStringified + '-' + voterAddress.toHexString())
         resolutionVoter.votingPower = result.value.value2
         resolutionVoter.address = voterAddress
+        resolutionVoter.hasVoted = false
+        resolutionVoter.hasVotedYes = false
         resolutionVoter.save()
         possibleVotersIds.push(resolutionVoter.id)
+      } else {
+        log.warning('Tried getVoterVote for address {} but failed', [voterAddress.toHexString()])
       }
     }
 
@@ -109,7 +115,54 @@ export function handleResolutionUpdated(event: ResolutionUpdated): void {
   log.error('Trying to update non-existing resolution {}', [resolutionIdStringified])
 }
 
-export function handleResolutionVoted(event: ResolutionVoted): void {}
+export function handleResolutionVoted(event: ResolutionVoted): void {
+  const resolutionManager = ResolutionManager.bind(event.address)
+  const resolutionId = event.params.resolutionId
+  const voterAddress = event.params.from
+  
+  const resolutionIdStringified = resolutionId.toString()
+  const resolutionVoterId = resolutionIdStringified + '-' + voterAddress.toHexString()
+  
+  const resolutionEntity = Resolution.load(resolutionIdStringified)
+
+  if (resolutionEntity) {
+    resolutionEntity.hasQuorum = resolutionManager.getResolutionResult(resolutionId)
+    resolutionEntity.save()
+  }
+
+  const resolutionVoter = ResolutionVoter.load(resolutionVoterId)
+  if (resolutionVoter) {
+    resolutionVoter.hasVoted = true
+    resolutionVoter.hasVotedYes = event.params.isYes
+  }
+
+  const voting = Voting.bind(Address.fromString(VOTING_CONTRACT_ADDRESS)) // todo getting this from resolution manager maybe?
+  
+  const maybeDelegated = voting.try_getDelegateAt(voterAddress, resolutionId)
+
+  if (!maybeDelegated.reverted) {
+    const delegatedAddress = maybeDelegated.value
+    log.info('DelegatedAddress: {}, VoterAddress: {}, Resolution Id: {}', [delegatedAddress.toHexString(), voterAddress.toHexString(), resolutionIdStringified])
+
+    if (delegatedAddress != voterAddress) {
+      const resultForVoter = resolutionManager.try_getVoterVote(resolutionId, voterAddress)
+      if (!resultForVoter.reverted && resolutionVoter) {
+        resolutionVoter.votingPower = resultForVoter.value.value2
+      }
+
+      const resultForDelegated = resolutionManager.try_getVoterVote(resolutionId, delegatedAddress)
+      const resolutionVoterDelegated = ResolutionVoter.load(resolutionIdStringified + '-' + delegatedAddress.toHexString())
+      if (!resultForDelegated.reverted && resolutionVoterDelegated) {
+        resolutionVoterDelegated.votingPower = resultForDelegated.value.value2
+        resolutionVoterDelegated.save()
+      }
+    } 
+  }
+
+  if (resolutionVoter) {
+    resolutionVoter.save()
+  }
+}
 
 export function handleResolutionTypeCreated(event: ResolutionTypeCreated): void {
   const resolutionManagerEntity = getResolutionManagerEntity()
