@@ -1,4 +1,4 @@
-import { Bytes, ipfs, json, log, Address } from '@graphprotocol/graph-ts';
+import { Bytes, ipfs, json, log, Address, BigInt } from '@graphprotocol/graph-ts';
 
 import { Resolution, ResolutionManager as ResolutionManagerEntity, ResolutionVoter, ResolutionType } from '../generated/schema';
 import { ResolutionManager__resolutionsResult } from '../generated/ResolutionManager/ResolutionManager';
@@ -76,6 +76,7 @@ export function handleResolutionApproved(event: ResolutionApproved): void {
     const blockChainResolution = resolutionManager.resolutions(event.params.resolutionId)
     resolutionEntity.approveTimestamp = blockChainResolution.value2
     resolutionEntity.approveBy = event.transaction.from
+    resolutionEntity.snapshotId = blockChainResolution.value3
     resolutionEntity.save()
     return
   }
@@ -124,6 +125,7 @@ export function handleResolutionVoted(event: ResolutionVoted): void {
   const resolutionVoterId = resolutionIdStringified + '-' + voterAddress.toHexString()
   
   const resolutionEntity = Resolution.load(resolutionIdStringified)
+  const snapshotId = resolutionEntity ? resolutionEntity.snapshotId : BigInt.fromI32(0)
 
   if (resolutionEntity) {
     resolutionEntity.hasQuorum = resolutionManager.getResolutionResult(resolutionId)
@@ -138,11 +140,13 @@ export function handleResolutionVoted(event: ResolutionVoted): void {
 
   const voting = Voting.bind(Address.fromString(VOTING_CONTRACT_ADDRESS)) // todo getting this from resolution manager maybe?
   
-  const maybeDelegated = voting.try_getDelegateAt(voterAddress, resolutionId)
+  const maybeDelegated = voting.try_getDelegateAt(voterAddress, snapshotId)
 
   if (!maybeDelegated.reverted) {
     const delegatedAddress = maybeDelegated.value
-    log.info('DelegatedAddress: {}, VoterAddress: {}, Resolution Id: {}', [delegatedAddress.toHexString(), voterAddress.toHexString(), resolutionIdStringified])
+    log.info('DelegatedAddress: {}, VoterAddress: {}, Resolution Id: {}, Snapshot Id: {}', [
+      delegatedAddress.toHexString(), voterAddress.toHexString(), resolutionIdStringified, snapshotId.toString()
+    ])
 
     if (delegatedAddress != voterAddress) {
       const resultForVoter = resolutionManager.try_getVoterVote(resolutionId, voterAddress)

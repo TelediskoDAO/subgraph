@@ -174,6 +174,7 @@ export class Resolution extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
+    this.set("snapshotId", Value.fromBigInt(BigInt.zero()));
     this.set("ipfsDataURI", Value.fromString(""));
     this.set("isNegative", Value.fromBoolean(false));
     this.set("yesVotesTotal", Value.fromBigInt(BigInt.zero()));
@@ -210,6 +211,15 @@ export class Resolution extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get snapshotId(): BigInt {
+    let value = this.get("snapshotId");
+    return value!.toBigInt();
+  }
+
+  set snapshotId(value: BigInt) {
+    this.set("snapshotId", Value.fromBigInt(value));
   }
 
   get ipfsDataURI(): string {

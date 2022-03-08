@@ -17,6 +17,7 @@ type ResolutionType @entity {
 
 type Resolution @entity {
   id: ID!
+  snapshotId: BigInt!
   ipfsDataURI: String!
   title: String
   content: String
