@@ -147,6 +147,15 @@
   },
   {
     "inputs": [
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "afterAddContributor",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "address", "name": "from", "type": "address" },
       { "internalType": "address", "name": "to", "type": "address" },
       { "internalType": "uint256", "name": "amount", "type": "uint256" }

@@ -13,7 +13,7 @@ import {
 } from "../generated/ResolutionManager/ResolutionManager"
 
 export const RESOLUTION_MANAGER_ID = '0'
-const VOTING_CONTRACT_ADDRESS = '0x698b17b48dccfe5d82aa287b0b87bffbd796cae2'
+const VOTING_CONTRACT_ADDRESS = '0xd423E7E6cEFcE3d2D93da72f3b53c6b14bbC0189'
 
 const setValuesFromResolutionContract = (resolutionEntity: Resolution, blockChainResolution: ResolutionManager__resolutionsResult): void => {
   const ipfsDataURI = blockChainResolution.value0

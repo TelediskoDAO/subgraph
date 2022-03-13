@@ -517,6 +517,36 @@ export class ConstructorCall__Outputs {
   }
 }
 
+export class AfterAddContributorCall extends ethereum.Call {
+  get inputs(): AfterAddContributorCall__Inputs {
+    return new AfterAddContributorCall__Inputs(this);
+  }
+
+  get outputs(): AfterAddContributorCall__Outputs {
+    return new AfterAddContributorCall__Outputs(this);
+  }
+}
+
+export class AfterAddContributorCall__Inputs {
+  _call: AfterAddContributorCall;
+
+  constructor(call: AfterAddContributorCall) {
+    this._call = call;
+  }
+
+  get account(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class AfterAddContributorCall__Outputs {
+  _call: AfterAddContributorCall;
+
+  constructor(call: AfterAddContributorCall) {
+    this._call = call;
+  }
+}
+
 export class AfterTokenTransferCall extends ethereum.Call {
   get inputs(): AfterTokenTransferCall__Inputs {
     return new AfterTokenTransferCall__Inputs(this);
