@@ -34,6 +34,12 @@ type Resolution @entity {
   hasQuorum: Boolean!
 }
 
+type DelegationUser @entity {
+  id: ID!
+  address: Bytes!
+  delegated: Bytes!
+}
+
 type ResolutionManager @entity {
   id: ID!
   contributorsAddresses: [Bytes!]!
