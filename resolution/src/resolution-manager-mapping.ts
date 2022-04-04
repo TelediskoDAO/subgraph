@@ -49,9 +49,15 @@ export function handleResolutionApproved(event: ResolutionApproved): void {
   const resolutionIdStringified = event.params.resolutionId.toString()
   const resolutionEntity = Resolution.load(resolutionIdStringified)
 
+  const voting = Voting.bind(Address.fromString(VOTING_CONTRACT_ADDRESS))
+
   if (resolutionEntity) {
     const resolutionManagerEntity = getResolutionManagerEntity()
     const possibleVotersIds: string[] = []
+    const blockChainResolution = resolutionManager.resolutions(event.params.resolutionId)
+    resolutionEntity.approveTimestamp = blockChainResolution.value2
+    resolutionEntity.approveBy = event.transaction.from
+    resolutionEntity.snapshotId = blockChainResolution.value3
 
     for (let index = 0; index < resolutionManagerEntity.contributorsAddresses.length; index++) {
       const voterAddress = resolutionManagerEntity.contributorsAddresses[index];
@@ -62,6 +68,13 @@ export function handleResolutionApproved(event: ResolutionApproved): void {
         resolutionVoter.address = voterAddress
         resolutionVoter.hasVoted = false
         resolutionVoter.hasVotedYes = false
+        const maybeDelegated = voting.try_getDelegateAt(Address.fromString(voterAddress.toHex()), resolutionEntity.snapshotId)
+        if (!maybeDelegated.reverted) {
+          const delegatedAddress = maybeDelegated.value
+          resolutionVoter.delegated = delegatedAddress
+        } else {
+          resolutionVoter.delegated = voterAddress
+        }
         resolutionVoter.save()
         possibleVotersIds.push(resolutionVoter.id)
       } else {
@@ -73,10 +86,6 @@ export function handleResolutionApproved(event: ResolutionApproved): void {
       resolutionEntity.voters = possibleVotersIds
     }
 
-    const blockChainResolution = resolutionManager.resolutions(event.params.resolutionId)
-    resolutionEntity.approveTimestamp = blockChainResolution.value2
-    resolutionEntity.approveBy = event.transaction.from
-    resolutionEntity.snapshotId = blockChainResolution.value3
     resolutionEntity.save()
     return
   }
@@ -138,7 +147,7 @@ export function handleResolutionVoted(event: ResolutionVoted): void {
     resolutionVoter.hasVotedYes = event.params.isYes
   }
 
-  const voting = Voting.bind(Address.fromString(VOTING_CONTRACT_ADDRESS)) // todo getting this from resolution manager maybe?
+  const voting = Voting.bind(Address.fromString(VOTING_CONTRACT_ADDRESS))
   
   const maybeDelegated = voting.try_getDelegateAt(voterAddress, snapshotId)
 
@@ -164,6 +173,8 @@ export function handleResolutionVoted(event: ResolutionVoted): void {
   }
 
   if (resolutionVoter) {
+    // if a resolution voter has voted, reset its delegated address
+    resolutionVoter.delegated = voterAddress
     resolutionVoter.save()
   }
 }

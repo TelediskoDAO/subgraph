@@ -26,8 +26,6 @@ dataSources:
         - name: Voting
           file: ResolutionManager/abis/Voting.json
       eventHandlers:
-        - event: DelegateLostVotingPower(indexed address,indexed uint256,uint256)
-          handler: handleDelegateLostVotingPower
         - event: ResolutionApproved(indexed address,indexed uint256)
           handler: handleResolutionApproved
         - event: ResolutionCreated(indexed address,indexed uint256)

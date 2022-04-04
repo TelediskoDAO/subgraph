@@ -4,6 +4,7 @@ type ResolutionVoter @entity {
   address: Bytes!
   hasVoted: Boolean!
   hasVotedYes: Boolean!
+  delegated: Bytes!
 }
 
 type ResolutionType @entity {

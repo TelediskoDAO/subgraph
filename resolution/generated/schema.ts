@@ -20,6 +20,7 @@ export class ResolutionVoter extends Entity {
     this.set("address", Value.fromBytes(Bytes.empty()));
     this.set("hasVoted", Value.fromBoolean(false));
     this.set("hasVotedYes", Value.fromBoolean(false));
+    this.set("delegated", Value.fromBytes(Bytes.empty()));
   }
 
   save(): void {
@@ -82,6 +83,15 @@ export class ResolutionVoter extends Entity {
 
   set hasVotedYes(value: boolean) {
     this.set("hasVotedYes", Value.fromBoolean(value));
+  }
+
+  get delegated(): Bytes {
+    let value = this.get("delegated");
+    return value!.toBytes();
+  }
+
+  set delegated(value: Bytes) {
+    this.set("delegated", Value.fromBytes(value));
   }
 }
 
