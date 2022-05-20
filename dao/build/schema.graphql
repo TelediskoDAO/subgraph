@@ -41,7 +41,7 @@ type DelegationUser @entity {
   delegated: Bytes!
 }
 
-type ResolutionManager @entity {
+type DaoManager @entity {
   id: ID!
   contributorsAddresses: [Bytes!]!
   foundersAddresses: [Bytes!]!

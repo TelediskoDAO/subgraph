@@ -445,13 +445,13 @@ export class DelegationUser extends Entity {
   }
 }
 
-export class ResolutionManager extends Entity {
+export class DaoManager extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
 
     this.set("contributorsAddresses", Value.fromBytesArray(new Array(0)));
-    this.set("foundersAddresses", Value.fromBytesArray(new Array(0)));
+    this.set("managingBoardAddresses", Value.fromBytesArray(new Array(0)));
     this.set("shareholdersAddresses", Value.fromBytesArray(new Array(0)));
     this.set("investorsAddresses", Value.fromBytesArray(new Array(0)));
     this.set("resolutionTypes", Value.fromStringArray(new Array(0)));
@@ -459,21 +459,19 @@ export class ResolutionManager extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save ResolutionManager entity without an ID");
+    assert(id != null, "Cannot save DaoManager entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save ResolutionManager entity with non-string ID. " +
+        "Cannot save DaoManager entity with non-string ID. " +
           'Considering using .toHex() to convert the "id" to a string.'
       );
-      store.set("ResolutionManager", id.toString(), this);
+      store.set("DaoManager", id.toString(), this);
     }
   }
 
-  static load(id: string): ResolutionManager | null {
-    return changetype<ResolutionManager | null>(
-      store.get("ResolutionManager", id)
-    );
+  static load(id: string): DaoManager | null {
+    return changetype<DaoManager | null>(store.get("DaoManager", id));
   }
 
   get id(): string {
@@ -494,13 +492,13 @@ export class ResolutionManager extends Entity {
     this.set("contributorsAddresses", Value.fromBytesArray(value));
   }
 
-  get foundersAddresses(): Array<Bytes> {
-    let value = this.get("foundersAddresses");
+  get managingBoardAddresses(): Array<Bytes> {
+    let value = this.get("managingBoardAddresses");
     return value!.toBytesArray();
   }
 
-  set foundersAddresses(value: Array<Bytes>) {
-    this.set("foundersAddresses", Value.fromBytesArray(value));
+  set managingBoardAddresses(value: Array<Bytes>) {
+    this.set("managingBoardAddresses", Value.fromBytesArray(value));
   }
 
   get shareholdersAddresses(): Array<Bytes> {

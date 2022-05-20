@@ -1,6 +1,6 @@
 import { Bytes, ipfs, json, log, Address, BigInt } from '@graphprotocol/graph-ts';
 
-import { Resolution, ResolutionManager as ResolutionManagerEntity, ResolutionVoter, ResolutionType } from '../generated/schema';
+import { Resolution, ResolutionVoter, ResolutionType } from '../generated/schema';
 import { ResolutionManager__resolutionsResult } from '../generated/ResolutionManager/ResolutionManager';
 import { Voting } from '../generated/Voting/Voting';
 import {
@@ -11,8 +11,8 @@ import {
   ResolutionVoted,
   ResolutionTypeCreated
 } from "../generated/ResolutionManager/ResolutionManager"
+import { getDaoManagerEntity } from './dao-manager';
 
-export const RESOLUTION_MANAGER_ID = '0'
 const VOTING_CONTRACT_ADDRESS = '0x5cd92eC33a70b017744eBf87205Ec186c9A4d8cD'
 
 const setValuesFromResolutionContract = (resolutionEntity: Resolution, blockChainResolution: ResolutionManager__resolutionsResult): void => {
@@ -52,15 +52,15 @@ export function handleResolutionApproved(event: ResolutionApproved): void {
   const voting = Voting.bind(Address.fromString(VOTING_CONTRACT_ADDRESS))
 
   if (resolutionEntity) {
-    const resolutionManagerEntity = getResolutionManagerEntity()
+    const daoManagerEntity = getDaoManagerEntity()
     const possibleVotersIds: string[] = []
     const blockChainResolution = resolutionManager.resolutions(event.params.resolutionId)
     resolutionEntity.approveTimestamp = blockChainResolution.value2
     resolutionEntity.approveBy = event.transaction.from
     resolutionEntity.snapshotId = blockChainResolution.value3
 
-    for (let index = 0; index < resolutionManagerEntity.contributorsAddresses.length; index++) {
-      const voterAddress = resolutionManagerEntity.contributorsAddresses[index];
+    for (let index = 0; index < daoManagerEntity.contributorsAddresses.length; index++) {
+      const voterAddress = daoManagerEntity.contributorsAddresses[index];
       const result = resolutionManager.try_getVoterVote(event.params.resolutionId, Address.fromString(voterAddress.toHex()))
       if (!result.reverted) {
         const resolutionVoter = new ResolutionVoter(resolutionIdStringified + '-' + voterAddress.toHexString())
@@ -180,8 +180,8 @@ export function handleResolutionVoted(event: ResolutionVoted): void {
 }
 
 export function handleResolutionTypeCreated(event: ResolutionTypeCreated): void {
-  const resolutionManagerEntity = getResolutionManagerEntity()
-  if (resolutionManagerEntity) {
+  const daoManagerEntity = getDaoManagerEntity()
+  if (daoManagerEntity) {
     const newResolutionTypeEntity = new ResolutionType(event.params.typeIndex.toString())
     
     const resolutionManager = ResolutionManager.bind(event.address)
@@ -193,14 +193,8 @@ export function handleResolutionTypeCreated(event: ResolutionTypeCreated): void 
     newResolutionTypeEntity.votingPeriod = resolutionType.value3
     newResolutionTypeEntity.canBeNegative = resolutionType.value4
   
-    resolutionManagerEntity.resolutionTypes = resolutionManagerEntity.resolutionTypes.concat([newResolutionTypeEntity.id])
-    resolutionManagerEntity.save()
+    daoManagerEntity.resolutionTypes = daoManagerEntity.resolutionTypes.concat([newResolutionTypeEntity.id])
+    daoManagerEntity.save()
     newResolutionTypeEntity.save()
   }
-}
-
-export function getResolutionManagerEntity(): ResolutionManagerEntity {
-  const resolutionManagerEntity = ResolutionManagerEntity.load(RESOLUTION_MANAGER_ID) || new ResolutionManagerEntity(RESOLUTION_MANAGER_ID)
-
-  return resolutionManagerEntity as ResolutionManagerEntity
 }
