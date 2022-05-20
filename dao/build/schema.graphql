@@ -44,7 +44,7 @@ type DelegationUser @entity {
 type DaoManager @entity {
   id: ID!
   contributorsAddresses: [Bytes!]!
-  foundersAddresses: [Bytes!]!
+  managingBoardAddresses: [Bytes!]!
   shareholdersAddresses: [Bytes!]!
   investorsAddresses: [Bytes!]!
   resolutionTypes: [ResolutionType!]!
