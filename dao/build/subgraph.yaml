@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: ResolutionManager
-    network: rinkeby
+    network: mumbai
     source:
-      address: "0x8cb6D1654195EEba103c9E55814EC39C6DACBF55"
+      address: "0x4EAA175CF35Aeb4d258fF0559759f094b9CA80dF"
       abi: ResolutionManager
-      startBlock: 10322880
+      startBlock: 26379411
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -39,11 +39,11 @@ dataSources:
       file: ResolutionManager/ResolutionManager.wasm
   - kind: ethereum
     name: ShareholderRegistry
-    network: rinkeby
+    network: mumbai
     source:
-      address: "0x01f898b2e0E31772Ca886c100c7931B574bAC932"
+      address: "0x3C1c98e300fc227CD1E0421452926109c8a9e7d6"
       abi: ShareholderRegistry
-      startBlock: 10322878
+      startBlock: 26379403
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -59,11 +59,11 @@ dataSources:
       file: ShareholderRegistry/ShareholderRegistry.wasm
   - kind: ethereum
     name: Voting
-    network: rinkeby
+    network: mumbai
     source:
-      address: "0xd423E7E6cEFcE3d2D93da72f3b53c6b14bbC0189"
+      address: "0x5cd92eC33a70b017744eBf87205Ec186c9A4d8cD"
       abi: Voting
-      startBlock: 10322876
+      startBlock: 26379398
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -77,3 +77,23 @@ dataSources:
         - event: DelegateChanged(indexed address,address,address)
           handler: handleDelegateChanged
       file: Voting/Voting.wasm
+  - kind: ethereum
+    name: TelediskoToken
+    network: mumbai
+    source:
+      address: "0xC2a4B87d186433c980ed1877D69aEF3A1Cf880E4"
+      abi: TelediskoToken
+      startBlock: 26379407
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: TelediskoToken
+          file: TelediskoToken/abis/TelediskoToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: TelediskoToken/TelediskoToken.wasm
