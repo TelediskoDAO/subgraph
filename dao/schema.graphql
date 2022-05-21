@@ -41,6 +41,21 @@ type DelegationUser @entity {
   delegated: Bytes!
 }
 
+type Offer @entity {
+  id: ID!
+  from: Bytes!
+  amount: BigInt!
+  expirationTimestamp: BigInt!
+}
+
+type DaoUser @entity {
+  id: ID!
+  address: Bytes!
+  totalBalance: BigInt!
+  vestingBalance: BigInt!
+  unlockedTempBalance: BigInt!
+}
+
 type DaoManager @entity {
   id: ID!
   contributorsAddresses: [Bytes!]!

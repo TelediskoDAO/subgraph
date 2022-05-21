@@ -445,6 +445,144 @@ export class DelegationUser extends Entity {
   }
 }
 
+export class Offer extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("from", Value.fromBytes(Bytes.empty()));
+    this.set("amount", Value.fromBigInt(BigInt.zero()));
+    this.set("expirationTimestamp", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Offer entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save Offer entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("Offer", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Offer | null {
+    return changetype<Offer | null>(store.get("Offer", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get from(): Bytes {
+    let value = this.get("from");
+    return value!.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
+  }
+
+  get amount(): BigInt {
+    let value = this.get("amount");
+    return value!.toBigInt();
+  }
+
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
+  }
+
+  get expirationTimestamp(): BigInt {
+    let value = this.get("expirationTimestamp");
+    return value!.toBigInt();
+  }
+
+  set expirationTimestamp(value: BigInt) {
+    this.set("expirationTimestamp", Value.fromBigInt(value));
+  }
+}
+
+export class DaoUser extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("address", Value.fromBytes(Bytes.empty()));
+    this.set("totalBalance", Value.fromBigInt(BigInt.zero()));
+    this.set("vestingBalance", Value.fromBigInt(BigInt.zero()));
+    this.set("unlockedTempBalance", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save DaoUser entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save DaoUser entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("DaoUser", id.toString(), this);
+    }
+  }
+
+  static load(id: string): DaoUser | null {
+    return changetype<DaoUser | null>(store.get("DaoUser", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get address(): Bytes {
+    let value = this.get("address");
+    return value!.toBytes();
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
+  }
+
+  get totalBalance(): BigInt {
+    let value = this.get("totalBalance");
+    return value!.toBigInt();
+  }
+
+  set totalBalance(value: BigInt) {
+    this.set("totalBalance", Value.fromBigInt(value));
+  }
+
+  get vestingBalance(): BigInt {
+    let value = this.get("vestingBalance");
+    return value!.toBigInt();
+  }
+
+  set vestingBalance(value: BigInt) {
+    this.set("vestingBalance", Value.fromBigInt(value));
+  }
+
+  get unlockedTempBalance(): BigInt {
+    let value = this.get("unlockedTempBalance");
+    return value!.toBigInt();
+  }
+
+  set unlockedTempBalance(value: BigInt) {
+    this.set("unlockedTempBalance", Value.fromBigInt(value));
+  }
+}
+
 export class DaoManager extends Entity {
   constructor(id: string) {
     super();
