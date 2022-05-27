@@ -46,6 +46,7 @@ type Offer @entity {
   from: Bytes!
   amount: BigInt!
   expirationTimestamp: BigInt!
+  createTimestamp: BigInt!
 }
 
 type DaoUser @entity {

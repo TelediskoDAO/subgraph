@@ -100,6 +100,8 @@ dataSources:
           handler: handleOfferCreated
         - event: OfferMatched(uint128,address,address,uint256)
           handler: handleOfferMatched
+        - event: VestingSet(address,uint256)
+          handler: handleVestingSet
       file: ./src/teledisko-token-mapping.ts
 
 

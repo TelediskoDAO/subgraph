@@ -1,5 +1,5 @@
 import { Address, log } from '@graphprotocol/graph-ts';
-import { OfferCreated, OfferMatched, Transfer } from "../generated/TelediskoToken/TelediskoToken"
+import { OfferCreated, OfferMatched, Transfer, VestingSet } from '../generated/TelediskoToken/TelediskoToken';
 import { DaoUser, Offer } from '../generated/schema';
 import { getDaoManagerEntity } from './dao-manager';
 
@@ -42,6 +42,7 @@ export function handleOfferCreated(event: OfferCreated): void {
   offerEntity.from = event.params.from
   offerEntity.amount = event.params.amount
   offerEntity.expirationTimestamp = event.params.expiration
+  offerEntity.createTimestamp = event.block.timestamp
 
   offerEntity.save()
 }
@@ -61,17 +62,24 @@ export function handleOfferMatched(event: OfferMatched): void {
   offerEntity.amount = offerEntity.amount.minus(event.params.amount)
   offerEntity.save()
 
-  const daoManagerEntity = getDaoManagerEntity()
   const fromDaoUser = DaoUser.load(fromHexString) || new DaoUser(fromHexString)
 
   if (fromDaoUser) {
-    // if from address is contributor, we should remove value from their unlocked temp balance
-    if (daoManagerEntity.contributorsAddresses.includes(event.params.from)) {
-      fromDaoUser.unlockedTempBalance = fromDaoUser.unlockedTempBalance.plus(event.params.amount)
-    }
+    fromDaoUser.unlockedTempBalance = fromDaoUser.unlockedTempBalance.plus(event.params.amount)
   
     fromDaoUser.save()
   }
 
+}
+
+export function handleVestingSet(event: VestingSet): void {
+  const toHexString = event.params.to.toHexString()
+
+  const toDaoUser = DaoUser.load(toHexString) || new DaoUser(toHexString)
+
+  if (toDaoUser) {
+    toDaoUser.vestingBalance = event.params.amount
+    toDaoUser.save()
+  }
 }
 

@@ -453,6 +453,7 @@ export class Offer extends Entity {
     this.set("from", Value.fromBytes(Bytes.empty()));
     this.set("amount", Value.fromBigInt(BigInt.zero()));
     this.set("expirationTimestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("createTimestamp", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -506,6 +507,15 @@ export class Offer extends Entity {
 
   set expirationTimestamp(value: BigInt) {
     this.set("expirationTimestamp", Value.fromBigInt(value));
+  }
+
+  get createTimestamp(): BigInt {
+    let value = this.get("createTimestamp");
+    return value!.toBigInt();
+  }
+
+  set createTimestamp(value: BigInt) {
+    this.set("createTimestamp", Value.fromBigInt(value));
   }
 }
 
