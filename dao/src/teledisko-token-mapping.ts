@@ -64,11 +64,14 @@ export function handleOfferMatched(event: OfferMatched): void {
   const daoManagerEntity = getDaoManagerEntity()
   const fromDaoUser = DaoUser.load(fromHexString) || new DaoUser(fromHexString)
 
-  // if from address is contributor, we should remove value from their unlocked temp balance
-  if (daoManagerEntity.contributorsAddresses.includes(event.params.from)) {
-    fromDaoUser.unlockedTempBalance = fromDaoUser.unlockedTempBalance.plus(event.params.amount)
+  if (fromDaoUser) {
+    // if from address is contributor, we should remove value from their unlocked temp balance
+    if (daoManagerEntity.contributorsAddresses.includes(event.params.from)) {
+      fromDaoUser.unlockedTempBalance = fromDaoUser.unlockedTempBalance.plus(event.params.amount)
+    }
+  
+    fromDaoUser.save()
   }
 
-  fromDaoUser.save()
 }
 
