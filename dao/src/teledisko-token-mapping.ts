@@ -1,6 +1,6 @@
-import { Address } from '@graphprotocol/graph-ts';
-import { Transfer } from "../generated/TelediskoToken/TelediskoToken"
-import { DaoUser } from '../generated/schema';
+import { Address, log } from '@graphprotocol/graph-ts';
+import { OfferCreated, OfferMatched, Transfer } from "../generated/TelediskoToken/TelediskoToken"
+import { DaoUser, Offer } from '../generated/schema';
 import { getDaoManagerEntity } from './dao-manager';
 
 export function handleTransfer(event: Transfer): void {
@@ -31,3 +31,44 @@ export function handleTransfer(event: Transfer): void {
     toDaoUser.save()
   }
 }
+
+export function handleOfferCreated(event: OfferCreated): void {
+  const fromHexString = event.params.from.toHexString()
+  const id = event.params.id.toHexString()
+  const offerId = id + '-' + fromHexString
+
+  const offerEntity = new Offer(offerId)
+
+  offerEntity.from = event.params.from
+  offerEntity.amount = event.params.amount
+  offerEntity.expirationTimestamp = event.params.expiration
+
+  offerEntity.save()
+}
+
+export function handleOfferMatched(event: OfferMatched): void {
+  const fromHexString = event.params.from.toHexString()
+  const id = event.params.id.toHexString()
+  const offerId = id + '-' + fromHexString
+
+  const offerEntity = Offer.load(offerId)
+
+  if (!offerEntity) {
+    log.error('Offer {} not found',[offerId])
+    return
+  }
+
+  offerEntity.amount = offerEntity.amount.minus(event.params.amount)
+  offerEntity.save()
+
+  const daoManagerEntity = getDaoManagerEntity()
+  const fromDaoUser = DaoUser.load(fromHexString) || new DaoUser(fromHexString)
+
+  // if from address is contributor, we should remove value from their unlocked temp balance
+  if (daoManagerEntity.contributorsAddresses.includes(event.params.from)) {
+    fromDaoUser.unlockedTempBalance = fromDaoUser.unlockedTempBalance.plus(event.params.amount)
+  }
+
+  fromDaoUser.save()
+}
+

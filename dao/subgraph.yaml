@@ -6,9 +6,9 @@ dataSources:
     name: ResolutionManager
     network: mumbai
     source:
-      address: "0x4EAA175CF35Aeb4d258fF0559759f094b9CA80dF"
+      address: "0xB188Fa60ffE57a20E338337D1E35E663C4887B7a"
       abi: ResolutionManager
-      startBlock: 26379411
+      startBlock: 26485278
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -41,9 +41,9 @@ dataSources:
     name: ShareholderRegistry
     network: mumbai
     source:
-      address: "0x3C1c98e300fc227CD1E0421452926109c8a9e7d6"
+      address: "0x94C53B8E4eaafD6d91Ed3aBa6812889086EF1ee5"
       abi: ShareholderRegistry
-      startBlock: 26379403
+      startBlock: 26485275
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -61,9 +61,9 @@ dataSources:
     name: Voting
     network: mumbai
     source:
-      address: "0x5cd92eC33a70b017744eBf87205Ec186c9A4d8cD"
+      address: "0xFcd967b6f0d1690D0998C9A15E234695d8B9e667"
       abi: Voting
-      startBlock: 26379398
+      startBlock: 26485274
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -81,9 +81,9 @@ dataSources:
     name: TelediskoToken
     network: mumbai
     source:
-      address: "0xC2a4B87d186433c980ed1877D69aEF3A1Cf880E4"
+      address: "0x0E4Fd56e110c2B2B746d55c275856459B5093a83"
       abi: TelediskoToken
-      startBlock: 26379407
+      startBlock: 26485277
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -96,6 +96,10 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
+        - event: OfferCreated(uint128,address,uint256,uint256)
+          handler: handleOfferCreated
+        - event: OfferMatched(uint128,address,address,uint256)
+          handler: handleOfferMatched
       file: ./src/teledisko-token-mapping.ts
 
 
