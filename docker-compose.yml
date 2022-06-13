@@ -23,11 +23,13 @@ services:
       GRAPH_LOG: info
       GRAPH_ALLOW_NON_DETERMINISTIC_IPFS: 1
   ipfs:
-    image: ipfs/go-ipfs:v0.10.0
+    build: .
+    # image: ipfs/go-ipfs:v0.10.0
     ports:
       - '5001:5001'
     volumes:
       - ./data/ipfs:/data/ipfs
+    run:
   postgres:
     image: postgres
     ports:
