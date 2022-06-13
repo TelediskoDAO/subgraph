@@ -1,4 +1,4 @@
-FROM ipfs/go-ipfs:latest
+FROM ipfs/go-ipfs:v0.10.0
 
 RUN ipfs init \
     && ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["*"]' \
