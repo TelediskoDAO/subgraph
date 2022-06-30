@@ -1,7 +1,7 @@
 version: '3'
 services:
   graph-node:
-    image: graphprotocol/graph-node
+    image: graphprotocol/graph-node:ae9641b
     ports:
       - '8000:8000'
       - '8001:8001'
@@ -22,6 +22,7 @@ services:
       ethereum: 'tevmos:https://eth.bd.evmos.dev:8545'
       GRAPH_LOG: info
       GRAPH_ALLOW_NON_DETERMINISTIC_IPFS: 1
+      GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER: 709050
   ipfs:
     # image: ipfs/go-ipfs:v0.10.0
     image: telediskodao/go-ipfs-cors:v0.10.0
