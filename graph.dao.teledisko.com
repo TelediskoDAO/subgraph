@@ -1,29 +1,16 @@
 server {
     server_name graph.dao.teledisko.com;
 
-    location /ipfs/ {
-        if ($request_method ~* "(GET|POST)") {
-            add_header "Access-Control-Allow-Origin"  *;
-            add_header "Access-Control-Allow-Methods" "GET, POST, OPTIONS, HEAD";
-            add_header "Access-Control-Allow-Headers" "Authorization, Origin, X-Requested-With, Content-Type, Accept";
-        }
+    location /ipfs/api/v0/add {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass http://127.0.0.1:5001/api/v0/add;
+    }
 
-        # Preflighted requests
-        if ($request_method = OPTIONS ) {
-            add_header "Access-Control-Allow-Origin"  *;
-            add_header "Access-Control-Allow-Methods" "GET, POST, OPTIONS, HEAD";
-            add_header "Access-Control-Allow-Headers" "Authorization, Origin, X-Requested-With, Content-Type, Accept";
-            return 200;
-        }
-        proxy_set_header User-Agent "";
-        proxy_set_header Accept-Encoding "";
-        proxy_set_header Accept-Language "";
-        proxy_set_header Referer "";
-        proxy_set_header Origin "";
-        proxy_set_header Sec-Fetch-Dest "";
-        proxy_set_header Sec-Fetch-Mode "";
-        proxy_set_header Sec-Fetch-Site "";
-        proxy_pass http://127.0.0.1:5001/;
+    location /ipfs/api/v0/pin/add {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass http://127.0.0.1:5001/api/v0/pin/add;
     }
 
     location / {

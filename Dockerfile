@@ -1,8 +1,4 @@
 FROM ipfs/go-ipfs:v0.10.0
 
-RUN ipfs init \
-    && ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["*"]' \
-    && ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["GET", "POST"]' \
-    && ipfs config --json API.HTTPHeaders.Access-Control-Allow-Headers '["Authorization"]' \
-    && ipfs config --json API.HTTPHeaders.Access-Control-Expose-Headers '["Location"]' \
-    && ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials '["true"]'
+COPY ./bin/container_daemon /usr/local/bin/start_ipfs
+RUN chmod 0755 /usr/local/bin/start_ipfs

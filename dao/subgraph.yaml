@@ -8,9 +8,9 @@ dataSources:
     name: ResolutionManager
     network: tevmos
     source:
-      address: "0xc467c27c910DA54b72a591E2Acfa25f6fCB87FC6"
+      address: "0x4c03Df22d7b4012FA12635416b55Bed009c1397f"
       abi: ResolutionManager
-      startBlock: 1454191
+      startBlock: 1987157
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -43,9 +43,9 @@ dataSources:
     name: ShareholderRegistry
     network: tevmos
     source:
-      address: "0x22D5c0F55393F8D12e53721A30181C6ed7Ff2BD1"
+      address: "0xc574dE4611D1918538e8C18cd6CF20D8489A773C"
       abi: ShareholderRegistry
-      startBlock: 1454191
+      startBlock: 1987157
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -63,9 +63,9 @@ dataSources:
     name: Voting
     network: tevmos
     source:
-      address: "0x21daA233120356A14a97c236736fa0B664b3D6AE"
+      address: "0xE690727e6241daE469eA734A105cA485f4f4C72B"
       abi: Voting
-      startBlock: 1454191
+      startBlock: 1987157
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -83,9 +83,9 @@ dataSources:
     name: TelediskoToken
     network: tevmos
     source:
-      address: "0x125e97f84D21C78DeCC60D6B604F4b138706500a"
+      address: "0xB00fc0A2C0856dCDe7103AC6Ab392B0D34C0fD10"
       abi: TelediskoToken
-      startBlock: 1454191
+      startBlock: 1987157
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
