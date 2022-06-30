@@ -4,6 +4,13 @@ apt update
 apt upgrade
 reboot
 
+# Firewall
+
+ufw allow ssh
+ufw allow 80/tcp
+ufw allow 443/tcp
+ufw enable
+
 # Add user worker
 adduser worker
 mkdir ~worker/.ssh
