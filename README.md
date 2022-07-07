@@ -1,3 +1,4 @@
+*For the Teledisko DAO graph-node configuration, check [./provision](./provision/).*
 
 # Installation
 ```
