@@ -1,5 +1,11 @@
 *For the Teledisko DAO graph-node configuration, check [./provision](./provision/).*
 
+# Connect to the production server
+
+To manage containers, update the subgraph: `ssh worker@graph.dao.teledisko.com`
+
+To admin the server: `ssh root@graph.dao.teledisko.com`
+
 # Installation
 ```
 npm install -g @graphprotocol/graph-cli
