@@ -1,4 +1,4 @@
-*For the Teledisko DAO graph-node configuration, check [./provision](./provision/).*
+*For the Teledisko DAO graph-node configuration, check [./provision](./provision.md).*
 
 # Connect to the production server
 
