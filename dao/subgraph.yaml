@@ -36,7 +36,6 @@ dataSources:
         - event: ResolutionTypeCreated(indexed address,indexed uint256)
           handler: handleResolutionTypeCreated
       file: ./src/resolution-manager-mapping.ts
-    network: tevmos
   - kind: ethereum
     name: ShareholderRegistry
     source:
@@ -54,7 +53,6 @@ dataSources:
         - event: StatusChanged(indexed address,bytes32,bytes32)
           handler: handleStatusChanged
       file: ./src/shareholder-registry-mapping.ts
-    network: tevmos
   - kind: ethereum
     name: Voting
     source:
@@ -72,7 +70,6 @@ dataSources:
         - event: DelegateChanged(indexed address,address,address)
           handler: handleDelegateChanged
       file: ./src/voting-mapping.ts
-    network: tevmos
   - kind: ethereum
     name: TelediskoToken
     source:
@@ -96,4 +93,3 @@ dataSources:
         - event: VestingSet(address,uint256)
           handler: handleVestingSet
       file: ./src/teledisko-token-mapping.ts
-    network: tevmos
