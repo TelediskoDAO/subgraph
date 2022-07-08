@@ -6,10 +6,9 @@ features:
 dataSources:
   - kind: ethereum
     name: ResolutionManager
-    network: tevmos
     source:
-      address: "0x306A613d82dcA16643Fc262f9023F525a51D684C"
       abi: ResolutionManager
+      address: "0x306A613d82dcA16643Fc262f9023F525a51D684C"
       startBlock: 2214986
     mapping:
       kind: ethereum/events
@@ -39,12 +38,12 @@ dataSources:
         - event: ResolutionTypeCreated(indexed address,indexed uint256)
           handler: handleResolutionTypeCreated
       file: ./src/resolution-manager-mapping.ts
+    network: tevmos
   - kind: ethereum
     name: ShareholderRegistry
-    network: tevmos
     source:
-      address: "0x7aeC1d496bbb6d57C69EA7a7dcfF91D9be7bcc00"
       abi: ShareholderRegistry
+      address: "0x7aeC1d496bbb6d57C69EA7a7dcfF91D9be7bcc00"
       startBlock: 2214986
     mapping:
       kind: ethereum/events
@@ -59,12 +58,12 @@ dataSources:
         - event: StatusChanged(indexed address,bytes32,bytes32)
           handler: handleStatusChanged
       file: ./src/shareholder-registry-mapping.ts
+    network: tevmos
   - kind: ethereum
     name: Voting
-    network: tevmos
     source:
-      address: "0x23DF91bB3572952B097222c6A0FfafDFCaf87946"
       abi: Voting
+      address: "0x23DF91bB3572952B097222c6A0FfafDFCaf87946"
       startBlock: 2214986
     mapping:
       kind: ethereum/events
@@ -79,12 +78,12 @@ dataSources:
         - event: DelegateChanged(indexed address,address,address)
           handler: handleDelegateChanged
       file: ./src/voting-mapping.ts
+    network: tevmos
   - kind: ethereum
     name: TelediskoToken
-    network: tevmos
     source:
-      address: "0x90746dD8B4A7b6190b102191EdAFF3890BE951b6"
       abi: TelediskoToken
+      address: "0x90746dD8B4A7b6190b102191EdAFF3890BE951b6"
       startBlock: 2214986
     mapping:
       kind: ethereum/events
@@ -105,6 +104,4 @@ dataSources:
         - event: VestingSet(address,uint256)
           handler: handleVestingSet
       file: ./src/teledisko-token-mapping.ts
-
-
-
+    network: tevmos

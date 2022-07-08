@@ -19,10 +19,10 @@ services:
       postgres_pass: let-me-in
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
-      ethereum: 'tevmos:https://eth.bd.evmos.dev:8545'
+      ethereum: '${ETHEREUM}'
       GRAPH_LOG: info
       GRAPH_ALLOW_NON_DETERMINISTIC_IPFS: 1
-      GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER: 709050
+      GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER: ${GENESIS_BLOCK}
   ipfs:
     # image: ipfs/go-ipfs:v0.10.0
     image: telediskodao/go-ipfs-cors:v0.10.0
