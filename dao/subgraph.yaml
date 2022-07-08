@@ -8,8 +8,6 @@ dataSources:
     name: ResolutionManager
     source:
       abi: ResolutionManager
-      address: "0x306A613d82dcA16643Fc262f9023F525a51D684C"
-      startBlock: 2214986
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -43,8 +41,6 @@ dataSources:
     name: ShareholderRegistry
     source:
       abi: ShareholderRegistry
-      address: "0x7aeC1d496bbb6d57C69EA7a7dcfF91D9be7bcc00"
-      startBlock: 2214986
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -63,8 +59,6 @@ dataSources:
     name: Voting
     source:
       abi: Voting
-      address: "0x23DF91bB3572952B097222c6A0FfafDFCaf87946"
-      startBlock: 2214986
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -83,8 +77,6 @@ dataSources:
     name: TelediskoToken
     source:
       abi: TelediskoToken
-      address: "0x90746dD8B4A7b6190b102191EdAFF3890BE951b6"
-      startBlock: 2214986
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
