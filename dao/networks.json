@@ -16,5 +16,23 @@
       "address": "0x255E7F86a8EdBcba1159f6664958b23Fd05ad128",
       "startBlock": 2214986
     }
+  },
+  "evmos": {
+    "ResolutionManager": {
+      "address": "0x770e8D92703b65da1887B1588c9Fd6067539B4B8",
+      "startBlock": 1222222
+    },
+    "ShareholderRegistry": {
+      "address": "0x35B72EB634D6A5C92cBcfccab3625B18ABB73e52",
+      "startBlock": 1222222
+    },
+    "Voting": {
+      "address": "0x2794D4446127e2E73034C2D472271D4C4EC88670",
+      "startBlock": 1222222
+    },
+    "TelediskoToken": {
+      "address": "0xde2acbaB2dCCF5E8741D9AF040066B8Bb7cE97CA",
+      "startBlock": 1222222
+    }
   }
 }
