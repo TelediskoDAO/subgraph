@@ -12,7 +12,10 @@ To admin the server: `ssh root@graph.dao.teledisko.com`
 
 Make sure you've updated all contract addresses (if https://github.com/TelediskoDAO/subgraph/issues/9 has not been implemented) in the `dao/subgraph.yaml` file. Update `startBlock` if needed.
 
-Connect to worker@graph.dao.teledisko.com, run `tmux attach` to connect to the current tmux session, go to `/home/worker/subgraph/dao`, run `pnpm run remove-local ; pnpm run create-local ; pnpm deploy-local`
+Connect to worker@graph.dao.teledisko.com, run `tmux attach` to connect to the current tmux session, go to `/home/worker/subgraph/dao`, run 
+
+- staging instance: `pnpm run remove-local ; pnpm run create-local ; pnpm deploy-staging`
+- production instance: `pnpm run remove-local ; pnpm run create-local ; pnpm deploy-production`
 
 ### Contract changed? Update and regenerate ABI
 
@@ -43,6 +46,11 @@ npm install -g @graphprotocol/graph-cli
 
 ## Setup
 ```
+# make sure your env contains the following variable
+ETHEREUM=<tevmos:https://eth.bd.evmos.dev:8545 | evmos:https://eth.bd.evmos.org:8545>
+GENESIS_BLOCK=<genesis block>
+NETWORK=<tevmos | evmos>
+
 # install and run ethnode or ganache-cli
 # deploy contracts locally
 
