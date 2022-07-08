@@ -1,3 +1,38 @@
+*For the Teledisko DAO graph-node configuration, check [./provision](./provision.md).*
+
+# Connect to the production server
+
+To manage containers, update the subgraph: `ssh worker@graph.dao.teledisko.com`
+
+To admin the server: `ssh root@graph.dao.teledisko.com`
+
+## Troubleshooting
+
+### Deploy a new subgraph
+
+Make sure you've updated all contract addresses (if https://github.com/TelediskoDAO/subgraph/issues/9 has not been implemented) in the `dao/subgraph.yaml` file. Update `startBlock` if needed.
+
+Connect to worker@graph.dao.teledisko.com, run `tmux attach` to connect to the current tmux session, go to `/home/worker/subgraph/dao`, run `pnpm run remove-local ; pnpm run create-local ; pnpm deploy-local`
+
+### Contract changed? Update and regenerate ABI
+
+TBD
+
+### ERRO the genesis block hash for chain tevmos has changed from X to Y since the last time we ran, component: BlockStore
+
+See: https://github.com/graphprotocol/graph-node/issues/3655
+
+Solution: stop docker compose, remove `/home/worker/subgraph/data` dir, restart docker compose.
+
+### ERRO Connection to provider failed when connecting to TEVMOS
+
+See: https://github.com/graphprotocol/graph-node/issues/3699
+
+Solution:
+- check if the testnet has been restarted and recreated using a new genesis file: https://github.com/evmos/testnets
+- if so, check the new lowest block number
+- update the lowest block number in `docker-compose.yml`, env variable `GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER`
+
 
 # Installation
 ```
