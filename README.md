@@ -10,7 +10,7 @@ To admin the server: `ssh root@graph.dao.teledisko.com`
 
 ### Deploy a new subgraph
 
-Make sure you've updated all contract addresses (if https://github.com/TelediskoDAO/subgraph/issues/9 has not been implemented).
+Make sure you've updated all contract addresses (if https://github.com/TelediskoDAO/subgraph/issues/9 has not been implemented) in the `dao/subgraph.yaml` file. Update `startBlock` if needed.
 
 Connect to worker@graph.dao.teledisko.com, run `tmux attach` to connect to the current tmux session, go to `/home/worker/subgraph/dao`, run `pnpm run remove-local ; pnpm run create-local ; pnpm deploy-local`
 
