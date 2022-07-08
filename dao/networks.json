@@ -1,19 +1,19 @@
 {
   "tevmos": {
     "ResolutionManager": {
-      "address": "0x306A613d82dcA16643Fc262f9023F525a51D684C",
+      "address": "0x5c93e075286513ad35355EFdE1EB26C1Ff783b27",
       "startBlock": 2214986
     },
     "ShareholderRegistry": {
-      "address": "0x7aeC1d496bbb6d57C69EA7a7dcfF91D9be7bcc00",
+      "address": "0x9DbeE0455Ab2910771928D65c4D52F36d2d7eBFD",
       "startBlock": 2214986
     },
     "Voting": {
-      "address": "0x23DF91bB3572952B097222c6A0FfafDFCaf87946",
+      "address": "0xC0f6d13017D42bDB0B6207221761a6320Ff6dF02",
       "startBlock": 2214986
     },
     "TelediskoToken": {
-      "address": "0x90746dD8B4A7b6190b102191EdAFF3890BE951b6",
+      "address": "0x255E7F86a8EdBcba1159f6664958b23Fd05ad128",
       "startBlock": 2214986
     }
   }
