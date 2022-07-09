@@ -35,6 +35,8 @@ dataSources:
           handler: handleResolutionVoted
         - event: ResolutionTypeCreated(indexed address,indexed uint256)
           handler: handleResolutionTypeCreated
+        - event: ResolutionExecuted(indexed address,indexed uint256)
+          handler: handleResolutionExecuted
       file: ./src/resolution-manager-mapping.ts
   - kind: ethereum
     name: ShareholderRegistry
