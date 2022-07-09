@@ -33,6 +33,9 @@ type Resolution @entity {
   approveBy: Bytes
   voters: [ResolutionVoter!]!
   hasQuorum: Boolean!
+  executionTo: [Bytes!]
+  executionData: [Bytes!]
+  executionTimestamp: BigInt
 }
 
 type DelegationUser @entity {

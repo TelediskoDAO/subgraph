@@ -389,6 +389,57 @@ export class Resolution extends Entity {
   set hasQuorum(value: boolean) {
     this.set("hasQuorum", Value.fromBoolean(value));
   }
+
+  get executionTo(): Array<Bytes> | null {
+    let value = this.get("executionTo");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytesArray();
+    }
+  }
+
+  set executionTo(value: Array<Bytes> | null) {
+    if (!value) {
+      this.unset("executionTo");
+    } else {
+      this.set("executionTo", Value.fromBytesArray(<Array<Bytes>>value));
+    }
+  }
+
+  get executionData(): Array<Bytes> | null {
+    let value = this.get("executionData");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytesArray();
+    }
+  }
+
+  set executionData(value: Array<Bytes> | null) {
+    if (!value) {
+      this.unset("executionData");
+    } else {
+      this.set("executionData", Value.fromBytesArray(<Array<Bytes>>value));
+    }
+  }
+
+  get executionTimestamp(): BigInt | null {
+    let value = this.get("executionTimestamp");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set executionTimestamp(value: BigInt | null) {
+    if (!value) {
+      this.unset("executionTimestamp");
+    } else {
+      this.set("executionTimestamp", Value.fromBigInt(<BigInt>value));
+    }
+  }
 }
 
 export class DelegationUser extends Entity {

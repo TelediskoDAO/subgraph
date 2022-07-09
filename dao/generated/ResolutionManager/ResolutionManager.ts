@@ -36,6 +36,24 @@ export class DelegateLostVotingPower__Params {
   }
 }
 
+export class Initialized extends ethereum.Event {
+  get params(): Initialized__Params {
+    return new Initialized__Params(this);
+  }
+}
+
+export class Initialized__Params {
+  _event: Initialized;
+
+  constructor(event: Initialized) {
+    this._event = event;
+  }
+
+  get version(): i32 {
+    return this._event.parameters[0].value.toI32();
+  }
+}
+
 export class ResolutionApproved extends ethereum.Event {
   get params(): ResolutionApproved__Params {
     return new ResolutionApproved__Params(this);
@@ -68,6 +86,28 @@ export class ResolutionCreated__Params {
   _event: ResolutionCreated;
 
   constructor(event: ResolutionCreated) {
+    this._event = event;
+  }
+
+  get from(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get resolutionId(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
+export class ResolutionExecuted extends ethereum.Event {
+  get params(): ResolutionExecuted__Params {
+    return new ResolutionExecuted__Params(this);
+  }
+}
+
+export class ResolutionExecuted__Params {
+  _event: ResolutionExecuted;
+
+  constructor(event: ResolutionExecuted) {
     this._event = event;
   }
 
@@ -232,6 +272,23 @@ export class RoleRevoked__Params {
   }
 }
 
+export class ResolutionManager__getExecutionDetailsResult {
+  value0: Array<Address>;
+  value1: Array<Bytes>;
+
+  constructor(value0: Array<Address>, value1: Array<Bytes>) {
+    this.value0 = value0;
+    this.value1 = value1;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromAddressArray(this.value0));
+    map.set("value1", ethereum.Value.fromBytesArray(this.value1));
+    return map;
+  }
+}
+
 export class ResolutionManager__getVoterVoteResult {
   value0: boolean;
   value1: boolean;
@@ -291,6 +348,7 @@ export class ResolutionManager__resolutionsResult {
   value3: BigInt;
   value4: BigInt;
   value5: boolean;
+  value6: BigInt;
 
   constructor(
     value0: string,
@@ -298,7 +356,8 @@ export class ResolutionManager__resolutionsResult {
     value2: BigInt,
     value3: BigInt,
     value4: BigInt,
-    value5: boolean
+    value5: boolean,
+    value6: BigInt
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -306,6 +365,7 @@ export class ResolutionManager__resolutionsResult {
     this.value3 = value3;
     this.value4 = value4;
     this.value5 = value5;
+    this.value6 = value6;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -316,6 +376,7 @@ export class ResolutionManager__resolutionsResult {
     map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
     map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
     map.set("value5", ethereum.Value.fromBoolean(this.value5));
+    map.set("value6", ethereum.Value.fromUnsignedBigInt(this.value6));
     return map;
   }
 }
@@ -351,15 +412,19 @@ export class ResolutionManager extends ethereum.SmartContract {
   createResolution(
     dataURI: string,
     resolutionTypeId: BigInt,
-    isNegative: boolean
+    isNegative: boolean,
+    executionTo: Array<Address>,
+    executionData: Array<Bytes>
   ): BigInt {
     let result = super.call(
       "createResolution",
-      "createResolution(string,uint256,bool):(uint256)",
+      "createResolution(string,uint256,bool,address[],bytes[]):(uint256)",
       [
         ethereum.Value.fromString(dataURI),
         ethereum.Value.fromUnsignedBigInt(resolutionTypeId),
-        ethereum.Value.fromBoolean(isNegative)
+        ethereum.Value.fromBoolean(isNegative),
+        ethereum.Value.fromAddressArray(executionTo),
+        ethereum.Value.fromBytesArray(executionData)
       ]
     );
 
@@ -369,15 +434,19 @@ export class ResolutionManager extends ethereum.SmartContract {
   try_createResolution(
     dataURI: string,
     resolutionTypeId: BigInt,
-    isNegative: boolean
+    isNegative: boolean,
+    executionTo: Array<Address>,
+    executionData: Array<Bytes>
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "createResolution",
-      "createResolution(string,uint256,bool):(uint256)",
+      "createResolution(string,uint256,bool,address[],bytes[]):(uint256)",
       [
         ethereum.Value.fromString(dataURI),
         ethereum.Value.fromUnsignedBigInt(resolutionTypeId),
-        ethereum.Value.fromBoolean(isNegative)
+        ethereum.Value.fromBoolean(isNegative),
+        ethereum.Value.fromAddressArray(executionTo),
+        ethereum.Value.fromBytesArray(executionData)
       ]
     );
     if (result.reverted) {
@@ -385,6 +454,41 @@ export class ResolutionManager extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getExecutionDetails(
+    resolutionId: BigInt
+  ): ResolutionManager__getExecutionDetailsResult {
+    let result = super.call(
+      "getExecutionDetails",
+      "getExecutionDetails(uint256):(address[],bytes[])",
+      [ethereum.Value.fromUnsignedBigInt(resolutionId)]
+    );
+
+    return new ResolutionManager__getExecutionDetailsResult(
+      result[0].toAddressArray(),
+      result[1].toBytesArray()
+    );
+  }
+
+  try_getExecutionDetails(
+    resolutionId: BigInt
+  ): ethereum.CallResult<ResolutionManager__getExecutionDetailsResult> {
+    let result = super.tryCall(
+      "getExecutionDetails",
+      "getExecutionDetails(uint256):(address[],bytes[])",
+      [ethereum.Value.fromUnsignedBigInt(resolutionId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new ResolutionManager__getExecutionDetailsResult(
+        value[0].toAddressArray(),
+        value[1].toBytesArray()
+      )
+    );
   }
 
   getResolutionResult(resolutionId: BigInt): boolean {
@@ -539,7 +643,7 @@ export class ResolutionManager extends ethereum.SmartContract {
   resolutions(param0: BigInt): ResolutionManager__resolutionsResult {
     let result = super.call(
       "resolutions",
-      "resolutions(uint256):(string,uint256,uint256,uint256,uint256,bool)",
+      "resolutions(uint256):(string,uint256,uint256,uint256,uint256,bool,uint256)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
@@ -549,7 +653,8 @@ export class ResolutionManager extends ethereum.SmartContract {
       result[2].toBigInt(),
       result[3].toBigInt(),
       result[4].toBigInt(),
-      result[5].toBoolean()
+      result[5].toBoolean(),
+      result[6].toBigInt()
     );
   }
 
@@ -558,7 +663,7 @@ export class ResolutionManager extends ethereum.SmartContract {
   ): ethereum.CallResult<ResolutionManager__resolutionsResult> {
     let result = super.tryCall(
       "resolutions",
-      "resolutions(uint256):(string,uint256,uint256,uint256,uint256,bool)",
+      "resolutions(uint256):(string,uint256,uint256,uint256,uint256,bool,uint256)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -572,7 +677,8 @@ export class ResolutionManager extends ethereum.SmartContract {
         value[2].toBigInt(),
         value[3].toBigInt(),
         value[4].toBigInt(),
-        value[5].toBoolean()
+        value[5].toBoolean(),
+        value[6].toBigInt()
       )
     );
   }
@@ -616,18 +722,6 @@ export class ConstructorCall__Inputs {
 
   constructor(call: ConstructorCall) {
     this._call = call;
-  }
-
-  get shareholderRegistry(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get telediskoToken(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get voting(): Address {
-    return this._call.inputValues[2].value.toAddress();
   }
 }
 
@@ -743,6 +837,14 @@ export class CreateResolutionCall__Inputs {
   get isNegative(): boolean {
     return this._call.inputValues[2].value.toBoolean();
   }
+
+  get executionTo(): Array<Address> {
+    return this._call.inputValues[3].value.toAddressArray();
+  }
+
+  get executionData(): Array<Bytes> {
+    return this._call.inputValues[4].value.toBytesArray();
+  }
 }
 
 export class CreateResolutionCall__Outputs {
@@ -754,6 +856,36 @@ export class CreateResolutionCall__Outputs {
 
   get value0(): BigInt {
     return this._call.outputValues[0].value.toBigInt();
+  }
+}
+
+export class ExecuteResolutionCall extends ethereum.Call {
+  get inputs(): ExecuteResolutionCall__Inputs {
+    return new ExecuteResolutionCall__Inputs(this);
+  }
+
+  get outputs(): ExecuteResolutionCall__Outputs {
+    return new ExecuteResolutionCall__Outputs(this);
+  }
+}
+
+export class ExecuteResolutionCall__Inputs {
+  _call: ExecuteResolutionCall;
+
+  constructor(call: ExecuteResolutionCall) {
+    this._call = call;
+  }
+
+  get resolutionId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class ExecuteResolutionCall__Outputs {
+  _call: ExecuteResolutionCall;
+
+  constructor(call: ExecuteResolutionCall) {
+    this._call = call;
   }
 }
 
@@ -787,6 +919,44 @@ export class GrantRoleCall__Outputs {
   _call: GrantRoleCall;
 
   constructor(call: GrantRoleCall) {
+    this._call = call;
+  }
+}
+
+export class InitializeCall extends ethereum.Call {
+  get inputs(): InitializeCall__Inputs {
+    return new InitializeCall__Inputs(this);
+  }
+
+  get outputs(): InitializeCall__Outputs {
+    return new InitializeCall__Outputs(this);
+  }
+}
+
+export class InitializeCall__Inputs {
+  _call: InitializeCall;
+
+  constructor(call: InitializeCall) {
+    this._call = call;
+  }
+
+  get shareholderRegistry(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get telediskoToken(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get voting(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+}
+
+export class InitializeCall__Outputs {
+  _call: InitializeCall;
+
+  constructor(call: InitializeCall) {
     this._call = call;
   }
 }
@@ -980,6 +1150,14 @@ export class UpdateResolutionCall__Inputs {
 
   get isNegative(): boolean {
     return this._call.inputValues[3].value.toBoolean();
+  }
+
+  get executionTo(): Array<Address> {
+    return this._call.inputValues[4].value.toAddressArray();
+  }
+
+  get executionData(): Array<Bytes> {
+    return this._call.inputValues[5].value.toBytesArray();
   }
 }
 
