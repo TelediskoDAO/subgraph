@@ -44,7 +44,13 @@ const setValuesFromResolutionContract = (
   resolutionEntity.yesVotesTotal = blockChainResolution.value4;
   resolutionEntity.isNegative = blockChainResolution.value5;
   resolutionEntity.ipfsDataURI = ipfsDataURI;
-  resolutionEntity.executionTo = executionDetails.value0;
+  const executionTo: Bytes[] = [];
+  for (let index = 0; index < executionDetails.value0.length; index++) {
+    // this is needed as you can't assign an Address[] to a Bytes[] directly, you need to first create Bytes[]
+    const current = executionDetails.value0[index];
+    executionTo.push(current);
+  }
+  resolutionEntity.executionTo = executionTo;
   resolutionEntity.executionData = executionDetails.value1;
 
   // get other resolution data living on ipfs

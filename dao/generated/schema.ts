@@ -195,6 +195,8 @@ export class Resolution extends Entity {
     this.set("createBy", Value.fromBytes(Bytes.empty()));
     this.set("voters", Value.fromStringArray(new Array(0)));
     this.set("hasQuorum", Value.fromBoolean(false));
+    this.set("executionTo", Value.fromBytesArray(new Array(0)));
+    this.set("executionData", Value.fromBytesArray(new Array(0)));
   }
 
   save(): void {
@@ -390,38 +392,22 @@ export class Resolution extends Entity {
     this.set("hasQuorum", Value.fromBoolean(value));
   }
 
-  get executionTo(): Array<Bytes> | null {
+  get executionTo(): Array<Bytes> {
     let value = this.get("executionTo");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBytesArray();
-    }
+    return value!.toBytesArray();
   }
 
-  set executionTo(value: Array<Bytes> | null) {
-    if (!value) {
-      this.unset("executionTo");
-    } else {
-      this.set("executionTo", Value.fromBytesArray(<Array<Bytes>>value));
-    }
+  set executionTo(value: Array<Bytes>) {
+    this.set("executionTo", Value.fromBytesArray(value));
   }
 
-  get executionData(): Array<Bytes> | null {
+  get executionData(): Array<Bytes> {
     let value = this.get("executionData");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBytesArray();
-    }
+    return value!.toBytesArray();
   }
 
-  set executionData(value: Array<Bytes> | null) {
-    if (!value) {
-      this.unset("executionData");
-    } else {
-      this.set("executionData", Value.fromBytesArray(<Array<Bytes>>value));
-    }
+  set executionData(value: Array<Bytes>) {
+    this.set("executionData", Value.fromBytesArray(value));
   }
 
   get executionTimestamp(): BigInt | null {
