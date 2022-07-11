@@ -9,7 +9,7 @@
     "create-local": "graph create --node http://localhost:8020/ TelediskoDAO/dao",
     "remove-local": "graph remove --node http://localhost:8020/ TelediskoDAO/dao",
     "deploy-production": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 TelediskoDAO/dao --networkFile networks.json --network evmos",
-    "deploy-staging": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 TelediskoDAO/dao --networkFile networks.json --network tevmos"
+    "deploy-staging": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 TelediskoDAO/dao --networkFile networks.json --network cronostestnet_338-3"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.32.0",
