@@ -34,5 +34,23 @@
       "address": "0xde2acbaB2dCCF5E8741D9AF040066B8Bb7cE97CA",
       "startBlock": 1222222
     }
+  },
+  "cronostestnet_338-3": {
+    "ResolutionManager": {
+      "address": "0x55999aD7f697FD15A82b8f125752FaBc25cc53B4",
+      "startBlock": 4124223
+    },
+    "ShareholderRegistry": {
+      "address": "0xD91E3491b707b71C53FEd17F47A16Fa393Bbf05c",
+      "startBlock": 4124223
+    },
+    "Voting": {
+      "address": "0xF5cB53a25fd808080b57Def998a4AA3Dc7b30bEF",
+      "startBlock": 4124223
+    },
+    "TelediskoToken": {
+      "address": "0xB426F074F3BB15cb94E117FE22bc439878E980A0",
+      "startBlock": 4124223
+    }
   }
 }
