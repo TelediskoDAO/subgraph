@@ -36,6 +36,24 @@ export class Approval__Params {
   }
 }
 
+export class Initialized extends ethereum.Event {
+  get params(): Initialized__Params {
+    return new Initialized__Params(this);
+  }
+}
+
+export class Initialized__Params {
+  _event: Initialized;
+
+  constructor(event: Initialized) {
+    this._event = event;
+  }
+
+  get version(): i32 {
+    return this._event.parameters[0].value.toI32();
+  }
+}
+
 export class RoleAdminChanged extends ethereum.Event {
   get params(): RoleAdminChanged__Params {
     return new RoleAdminChanged__Params(this);
@@ -252,25 +270,6 @@ export class ShareholderRegistry extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
-  FOUNDER_STATUS(): Bytes {
-    let result = super.call("FOUNDER_STATUS", "FOUNDER_STATUS():(bytes32)", []);
-
-    return result[0].toBytes();
-  }
-
-  try_FOUNDER_STATUS(): ethereum.CallResult<Bytes> {
-    let result = super.tryCall(
-      "FOUNDER_STATUS",
-      "FOUNDER_STATUS():(bytes32)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
   INVESTOR_STATUS(): Bytes {
     let result = super.call(
       "INVESTOR_STATUS",
@@ -285,6 +284,29 @@ export class ShareholderRegistry extends ethereum.SmartContract {
     let result = super.tryCall(
       "INVESTOR_STATUS",
       "INVESTOR_STATUS():(bytes32)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  MANAGING_BOARD_STATUS(): Bytes {
+    let result = super.call(
+      "MANAGING_BOARD_STATUS",
+      "MANAGING_BOARD_STATUS():(bytes32)",
+      []
+    );
+
+    return result[0].toBytes();
+  }
+
+  try_MANAGING_BOARD_STATUS(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "MANAGING_BOARD_STATUS",
+      "MANAGING_BOARD_STATUS():(bytes32)",
       []
     );
     if (result.reverted) {
@@ -816,21 +838,18 @@ export class ShareholderRegistry extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  transfer(recipient: Address, amount: BigInt): boolean {
+  transfer(to: Address, amount: BigInt): boolean {
     let result = super.call("transfer", "transfer(address,uint256):(bool)", [
-      ethereum.Value.fromAddress(recipient),
+      ethereum.Value.fromAddress(to),
       ethereum.Value.fromUnsignedBigInt(amount)
     ]);
 
     return result[0].toBoolean();
   }
 
-  try_transfer(
-    recipient: Address,
-    amount: BigInt
-  ): ethereum.CallResult<boolean> {
+  try_transfer(to: Address, amount: BigInt): ethereum.CallResult<boolean> {
     let result = super.tryCall("transfer", "transfer(address,uint256):(bool)", [
-      ethereum.Value.fromAddress(recipient),
+      ethereum.Value.fromAddress(to),
       ethereum.Value.fromUnsignedBigInt(amount)
     ]);
     if (result.reverted) {
@@ -840,13 +859,13 @@ export class ShareholderRegistry extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  transferFrom(sender: Address, recipient: Address, amount: BigInt): boolean {
+  transferFrom(from: Address, to: Address, amount: BigInt): boolean {
     let result = super.call(
       "transferFrom",
       "transferFrom(address,address,uint256):(bool)",
       [
-        ethereum.Value.fromAddress(sender),
-        ethereum.Value.fromAddress(recipient),
+        ethereum.Value.fromAddress(from),
+        ethereum.Value.fromAddress(to),
         ethereum.Value.fromUnsignedBigInt(amount)
       ]
     );
@@ -855,16 +874,16 @@ export class ShareholderRegistry extends ethereum.SmartContract {
   }
 
   try_transferFrom(
-    sender: Address,
-    recipient: Address,
+    from: Address,
+    to: Address,
     amount: BigInt
   ): ethereum.CallResult<boolean> {
     let result = super.tryCall(
       "transferFrom",
       "transferFrom(address,address,uint256):(bool)",
       [
-        ethereum.Value.fromAddress(sender),
-        ethereum.Value.fromAddress(recipient),
+        ethereum.Value.fromAddress(from),
+        ethereum.Value.fromAddress(to),
         ethereum.Value.fromUnsignedBigInt(amount)
       ]
     );
@@ -891,14 +910,6 @@ export class ConstructorCall__Inputs {
 
   constructor(call: ConstructorCall) {
     this._call = call;
-  }
-
-  get name(): string {
-    return this._call.inputValues[0].value.toString();
-  }
-
-  get symbol(): string {
-    return this._call.inputValues[1].value.toString();
   }
 }
 
@@ -1089,6 +1100,40 @@ export class IncreaseAllowanceCall__Outputs {
 
   get value0(): boolean {
     return this._call.outputValues[0].value.toBoolean();
+  }
+}
+
+export class InitializeCall extends ethereum.Call {
+  get inputs(): InitializeCall__Inputs {
+    return new InitializeCall__Inputs(this);
+  }
+
+  get outputs(): InitializeCall__Outputs {
+    return new InitializeCall__Outputs(this);
+  }
+}
+
+export class InitializeCall__Inputs {
+  _call: InitializeCall;
+
+  constructor(call: InitializeCall) {
+    this._call = call;
+  }
+
+  get name(): string {
+    return this._call.inputValues[0].value.toString();
+  }
+
+  get symbol(): string {
+    return this._call.inputValues[1].value.toString();
+  }
+}
+
+export class InitializeCall__Outputs {
+  _call: InitializeCall;
+
+  constructor(call: InitializeCall) {
+    this._call = call;
   }
 }
 
@@ -1305,7 +1350,7 @@ export class TransferCall__Inputs {
     this._call = call;
   }
 
-  get recipient(): Address {
+  get to(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
@@ -1343,11 +1388,11 @@ export class TransferFromCall__Inputs {
     this._call = call;
   }
 
-  get sender(): Address {
+  get from(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get recipient(): Address {
+  get to(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 
@@ -1365,5 +1410,35 @@ export class TransferFromCall__Outputs {
 
   get value0(): boolean {
     return this._call.outputValues[0].value.toBoolean();
+  }
+}
+
+export class TransferFromDAOBatchCall extends ethereum.Call {
+  get inputs(): TransferFromDAOBatchCall__Inputs {
+    return new TransferFromDAOBatchCall__Inputs(this);
+  }
+
+  get outputs(): TransferFromDAOBatchCall__Outputs {
+    return new TransferFromDAOBatchCall__Outputs(this);
+  }
+}
+
+export class TransferFromDAOBatchCall__Inputs {
+  _call: TransferFromDAOBatchCall;
+
+  constructor(call: TransferFromDAOBatchCall) {
+    this._call = call;
+  }
+
+  get recipients(): Array<Address> {
+    return this._call.inputValues[0].value.toAddressArray();
+  }
+}
+
+export class TransferFromDAOBatchCall__Outputs {
+  _call: TransferFromDAOBatchCall;
+
+  constructor(call: TransferFromDAOBatchCall) {
+    this._call = call;
   }
 }
