@@ -26,7 +26,10 @@ import {
   ResolutionTypeCreated,
 } from "../generated/ResolutionManager/ResolutionManager";
 import { getDaoManagerEntity } from "./dao-manager";
-import { ResolutionExecuted } from "../generated/ResolutionManager/ResolutionManager";
+import {
+  ResolutionExecuted,
+  ResolutionRejected,
+} from "../generated/ResolutionManager/ResolutionManager";
 
 const VOTING_CONTRACT_ADDRESS = "0x5cd92eC33a70b017744eBf87205Ec186c9A4d8cD";
 
