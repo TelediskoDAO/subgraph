@@ -37,6 +37,8 @@ dataSources:
           handler: handleResolutionTypeCreated
         - event: ResolutionExecuted(indexed address,indexed uint256)
           handler: handleResolutionExecuted
+        - event: ResolutionRejected(indexed address,indexed uint256)
+          handler: handleResolutionRejected
       file: ./src/resolution-manager-mapping.ts
   - kind: ethereum
     name: ShareholderRegistry

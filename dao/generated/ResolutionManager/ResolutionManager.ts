@@ -120,6 +120,28 @@ export class ResolutionExecuted__Params {
   }
 }
 
+export class ResolutionRejected extends ethereum.Event {
+  get params(): ResolutionRejected__Params {
+    return new ResolutionRejected__Params(this);
+  }
+}
+
+export class ResolutionRejected__Params {
+  _event: ResolutionRejected;
+
+  constructor(event: ResolutionRejected) {
+    this._event = event;
+  }
+
+  get from(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get resolutionId(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
 export class ResolutionTypeCreated extends ethereum.Event {
   get params(): ResolutionTypeCreated__Params {
     return new ResolutionTypeCreated__Params(this);
@@ -349,6 +371,7 @@ export class ResolutionManager__resolutionsResult {
   value4: BigInt;
   value5: boolean;
   value6: BigInt;
+  value7: BigInt;
 
   constructor(
     value0: string,
@@ -357,7 +380,8 @@ export class ResolutionManager__resolutionsResult {
     value3: BigInt,
     value4: BigInt,
     value5: boolean,
-    value6: BigInt
+    value6: BigInt,
+    value7: BigInt
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -366,6 +390,7 @@ export class ResolutionManager__resolutionsResult {
     this.value4 = value4;
     this.value5 = value5;
     this.value6 = value6;
+    this.value7 = value7;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -377,6 +402,7 @@ export class ResolutionManager__resolutionsResult {
     map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
     map.set("value5", ethereum.Value.fromBoolean(this.value5));
     map.set("value6", ethereum.Value.fromUnsignedBigInt(this.value6));
+    map.set("value7", ethereum.Value.fromUnsignedBigInt(this.value7));
     return map;
   }
 }
@@ -643,7 +669,7 @@ export class ResolutionManager extends ethereum.SmartContract {
   resolutions(param0: BigInt): ResolutionManager__resolutionsResult {
     let result = super.call(
       "resolutions",
-      "resolutions(uint256):(string,uint256,uint256,uint256,uint256,bool,uint256)",
+      "resolutions(uint256):(string,uint256,uint256,uint256,uint256,bool,uint256,uint256)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
@@ -654,7 +680,8 @@ export class ResolutionManager extends ethereum.SmartContract {
       result[3].toBigInt(),
       result[4].toBigInt(),
       result[5].toBoolean(),
-      result[6].toBigInt()
+      result[6].toBigInt(),
+      result[7].toBigInt()
     );
   }
 
@@ -663,7 +690,7 @@ export class ResolutionManager extends ethereum.SmartContract {
   ): ethereum.CallResult<ResolutionManager__resolutionsResult> {
     let result = super.tryCall(
       "resolutions",
-      "resolutions(uint256):(string,uint256,uint256,uint256,uint256,bool,uint256)",
+      "resolutions(uint256):(string,uint256,uint256,uint256,uint256,bool,uint256,uint256)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -678,7 +705,8 @@ export class ResolutionManager extends ethereum.SmartContract {
         value[3].toBigInt(),
         value[4].toBigInt(),
         value[5].toBoolean(),
-        value[6].toBigInt()
+        value[6].toBigInt(),
+        value[7].toBigInt()
       )
     );
   }
@@ -957,6 +985,36 @@ export class InitializeCall__Outputs {
   _call: InitializeCall;
 
   constructor(call: InitializeCall) {
+    this._call = call;
+  }
+}
+
+export class RejectResolutionCall extends ethereum.Call {
+  get inputs(): RejectResolutionCall__Inputs {
+    return new RejectResolutionCall__Inputs(this);
+  }
+
+  get outputs(): RejectResolutionCall__Outputs {
+    return new RejectResolutionCall__Outputs(this);
+  }
+}
+
+export class RejectResolutionCall__Inputs {
+  _call: RejectResolutionCall;
+
+  constructor(call: RejectResolutionCall) {
+    this._call = call;
+  }
+
+  get resolutionId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class RejectResolutionCall__Outputs {
+  _call: RejectResolutionCall;
+
+  constructor(call: RejectResolutionCall) {
     this._call = call;
   }
 }

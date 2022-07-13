@@ -959,6 +959,36 @@ export class ApproveCall__Outputs {
   }
 }
 
+export class BatchTransferFromDAOCall extends ethereum.Call {
+  get inputs(): BatchTransferFromDAOCall__Inputs {
+    return new BatchTransferFromDAOCall__Inputs(this);
+  }
+
+  get outputs(): BatchTransferFromDAOCall__Outputs {
+    return new BatchTransferFromDAOCall__Outputs(this);
+  }
+}
+
+export class BatchTransferFromDAOCall__Inputs {
+  _call: BatchTransferFromDAOCall;
+
+  constructor(call: BatchTransferFromDAOCall) {
+    this._call = call;
+  }
+
+  get recipients(): Array<Address> {
+    return this._call.inputValues[0].value.toAddressArray();
+  }
+}
+
+export class BatchTransferFromDAOCall__Outputs {
+  _call: BatchTransferFromDAOCall;
+
+  constructor(call: BatchTransferFromDAOCall) {
+    this._call = call;
+  }
+}
+
 export class BurnCall extends ethereum.Call {
   get inputs(): BurnCall__Inputs {
     return new BurnCall__Inputs(this);
@@ -1410,35 +1440,5 @@ export class TransferFromCall__Outputs {
 
   get value0(): boolean {
     return this._call.outputValues[0].value.toBoolean();
-  }
-}
-
-export class TransferFromDAOBatchCall extends ethereum.Call {
-  get inputs(): TransferFromDAOBatchCall__Inputs {
-    return new TransferFromDAOBatchCall__Inputs(this);
-  }
-
-  get outputs(): TransferFromDAOBatchCall__Outputs {
-    return new TransferFromDAOBatchCall__Outputs(this);
-  }
-}
-
-export class TransferFromDAOBatchCall__Inputs {
-  _call: TransferFromDAOBatchCall;
-
-  constructor(call: TransferFromDAOBatchCall) {
-    this._call = call;
-  }
-
-  get recipients(): Array<Address> {
-    return this._call.inputValues[0].value.toAddressArray();
-  }
-}
-
-export class TransferFromDAOBatchCall__Outputs {
-  _call: TransferFromDAOBatchCall;
-
-  constructor(call: TransferFromDAOBatchCall) {
-    this._call = call;
   }
 }
