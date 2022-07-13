@@ -279,6 +279,23 @@ export function handleResolutionVoted(event: ResolutionVoted): void {
   }
 }
 
+export function handleResolutionRejected(event: ResolutionRejected): void {
+  const resolutionIdStringified = event.params.resolutionId.toString();
+  const resolutionEntity = Resolution.load(resolutionIdStringified);
+
+  if (resolutionEntity) {
+    resolutionEntity.rejectTimestamp = event.block.timestamp;
+    resolutionEntity.rejectBy = event.transaction.from;
+
+    resolutionEntity.save();
+    return;
+  }
+
+  log.error("Trying to reject non-existing resolution {}", [
+    resolutionIdStringified,
+  ]);
+}
+
 export function handleResolutionTypeCreated(
   event: ResolutionTypeCreated
 ): void {
