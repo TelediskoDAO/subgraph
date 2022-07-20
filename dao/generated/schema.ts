@@ -192,6 +192,7 @@ export class Resolution extends Entity {
     this.set("createTimestamp", Value.fromBigInt(BigInt.zero()));
     this.set("updateTimestamp", Value.fromBigInt(BigInt.zero()));
     this.set("approveTimestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("rejectTimestamp", Value.fromBigInt(BigInt.zero()));
     this.set("createBy", Value.fromBytes(Bytes.empty()));
     this.set("voters", Value.fromStringArray(new Array(0)));
     this.set("hasQuorum", Value.fromBoolean(false));
@@ -331,6 +332,15 @@ export class Resolution extends Entity {
     this.set("approveTimestamp", Value.fromBigInt(value));
   }
 
+  get rejectTimestamp(): BigInt {
+    let value = this.get("rejectTimestamp");
+    return value!.toBigInt();
+  }
+
+  set rejectTimestamp(value: BigInt) {
+    this.set("rejectTimestamp", Value.fromBigInt(value));
+  }
+
   get createBy(): Bytes {
     let value = this.get("createBy");
     return value!.toBytes();
@@ -371,6 +381,23 @@ export class Resolution extends Entity {
       this.unset("approveBy");
     } else {
       this.set("approveBy", Value.fromBytes(<Bytes>value));
+    }
+  }
+
+  get rejectBy(): Bytes | null {
+    let value = this.get("rejectBy");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set rejectBy(value: Bytes | null) {
+    if (!value) {
+      this.unset("rejectBy");
+    } else {
+      this.set("rejectBy", Value.fromBytes(<Bytes>value));
     }
   }
 

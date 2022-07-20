@@ -26,7 +26,10 @@ import {
   ResolutionTypeCreated,
 } from "../generated/ResolutionManager/ResolutionManager";
 import { getDaoManagerEntity } from "./dao-manager";
-import { ResolutionExecuted } from "../generated/ResolutionManager/ResolutionManager";
+import {
+  ResolutionExecuted,
+  ResolutionRejected,
+} from "../generated/ResolutionManager/ResolutionManager";
 
 const VOTING_CONTRACT_ADDRESS = "0x5cd92eC33a70b017744eBf87205Ec186c9A4d8cD";
 
@@ -277,6 +280,23 @@ export function handleResolutionVoted(event: ResolutionVoted): void {
     resolutionVoter.delegated = voterAddress;
     resolutionVoter.save();
   }
+}
+
+export function handleResolutionRejected(event: ResolutionRejected): void {
+  const resolutionIdStringified = event.params.resolutionId.toString();
+  const resolutionEntity = Resolution.load(resolutionIdStringified);
+
+  if (resolutionEntity) {
+    resolutionEntity.rejectTimestamp = event.block.timestamp;
+    resolutionEntity.rejectBy = event.transaction.from;
+
+    resolutionEntity.save();
+    return;
+  }
+
+  log.error("Trying to reject non-existing resolution {}", [
+    resolutionIdStringified,
+  ]);
 }
 
 export function handleResolutionTypeCreated(

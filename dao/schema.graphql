@@ -28,9 +28,11 @@ type Resolution @entity {
   createTimestamp: BigInt!
   updateTimestamp: BigInt!
   approveTimestamp: BigInt!
+  rejectTimestamp: BigInt!
   createBy: Bytes!
   updateBy: Bytes
   approveBy: Bytes
+  rejectBy: Bytes
   voters: [ResolutionVoter!]!
   hasQuorum: Boolean!
   executionTo: [Bytes!]!
