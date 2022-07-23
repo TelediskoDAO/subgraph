@@ -20,19 +20,19 @@
   "evmos": {
     "ResolutionManager": {
       "address": "0x5F667BDee7b2742003BA0E616Ea3D678F9AF1738",
-      "startBlock": 1447045
+      "startBlock": 1800000
     },
     "ShareholderRegistry": {
       "address": "0xa516a9AbDBD6bF29DA5B76820465f366146449A3",
-      "startBlock": 1447027
+      "startBlock": 1800000
     },
     "Voting": {
       "address": "0x5c91fB736aDf04a1DAd11E0C3c1bD7E1Eb68cf33",
-      "startBlock": 1447022
+      "startBlock": 1800000
     },
     "TelediskoToken": {
       "address": "0x8Add9613f43786eaD117E73ce6820ecf9b7d0cC3",
-      "startBlock": 1447036
+      "startBlock": 1800000
     }
   },
   "cronostestnet_338-3": {
