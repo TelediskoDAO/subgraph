@@ -22,6 +22,7 @@ else
     *) INIT_ARGS="--profile=$IPFS_PROFILE" ;;
   esac
   ipfs init $INIT_ARGS
+  ipfs config profile apply server
   ipfs config Addresses.API /ip4/0.0.0.0/tcp/5001
   ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080
 
