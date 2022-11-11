@@ -123,7 +123,7 @@ export function handleResolutionApproved(event: ResolutionApproved): void {
           resolutionEntity.snapshotId.toHexString(),
         ]);
         const delegatedAddress = voting.getDelegateAt(
-          Address.fromString(voterAddress.toHex()),
+          voterAddress,
           resolutionEntity.snapshotId
         );
         resolutionVoter.delegated = delegatedAddress;
