@@ -96,6 +96,10 @@ export function handleResolutionApproved(event: ResolutionApproved): void {
     resolutionEntity.approveBy = event.transaction.from;
     resolutionEntity.snapshotId = blockChainResolution.value3;
 
+    log.info("Saving snapshot id {}", [
+      resolutionEntity.snapshotId.toHexString(),
+    ]);
+
     for (
       let index = 0;
       index < daoManagerEntity.contributorsAddresses.length;
@@ -114,16 +118,11 @@ export function handleResolutionApproved(event: ResolutionApproved): void {
         resolutionVoter.address = voterAddress;
         resolutionVoter.hasVoted = false;
         resolutionVoter.hasVotedYes = false;
-        const maybeDelegated = voting.try_getDelegateAt(
+        const delegatedAddress = voting.getDelegateAt(
           Address.fromString(voterAddress.toHex()),
           resolutionEntity.snapshotId
         );
-        if (!maybeDelegated.reverted) {
-          const delegatedAddress = maybeDelegated.value;
-          resolutionVoter.delegated = delegatedAddress;
-        } else {
-          resolutionVoter.delegated = voterAddress;
-        }
+        resolutionVoter.delegated = delegatedAddress;
         resolutionVoter.save();
         possibleVotersIds.push(resolutionVoter.id);
       } else {
