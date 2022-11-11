@@ -31,7 +31,7 @@ import {
   ResolutionRejected,
 } from "../generated/ResolutionManager/ResolutionManager";
 
-const VOTING_CONTRACT_ADDRESS = "0x5cd92eC33a70b017744eBf87205Ec186c9A4d8cD";
+const VOTING_CONTRACT_ADDRESS = "0x5153c164A64BAD1FaC3C6596FA784f587caC26ab";
 
 const setValuesFromResolutionContract = (
   resolutionEntity: Resolution,
