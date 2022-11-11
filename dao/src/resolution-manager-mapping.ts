@@ -118,6 +118,10 @@ export function handleResolutionApproved(event: ResolutionApproved): void {
         resolutionVoter.address = voterAddress;
         resolutionVoter.hasVoted = false;
         resolutionVoter.hasVotedYes = false;
+        log.info("Calling getDelegatedAt with address {} and snapshot {}", [
+          voterAddress.toHexString(),
+          resolutionEntity.snapshotId.toHexString(),
+        ]);
         const delegatedAddress = voting.getDelegateAt(
           Address.fromString(voterAddress.toHex()),
           resolutionEntity.snapshotId
