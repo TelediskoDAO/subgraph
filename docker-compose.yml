@@ -1,7 +1,9 @@
 version: '3'
 services:
   graph-node:
-    image: graphprotocol/graph-node:ae9641b
+    # tag v0.28.2
+    # https://github.com/graphprotocol/graph-node/releases/tag/v0.28.2
+    image: graphprotocol/graph-node:d33bb7e
     ports:
       - '8000:8000'
       - '8001:8001'
