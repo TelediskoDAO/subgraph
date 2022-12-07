@@ -8,8 +8,6 @@ dataSources:
     name: ResolutionManager
     source:
       abi: ResolutionManager
-      address: "0xA65d12De252c60EBD251b3aE45d6029e9eBCA5E7"
-      startBlock: 1800000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -42,13 +40,10 @@ dataSources:
         - event: ResolutionRejected(indexed address,indexed uint256)
           handler: handleResolutionRejected
       file: ./src/resolution-manager-mapping.ts
-    network: evmos
   - kind: ethereum
     name: ShareholderRegistry
     source:
       abi: ShareholderRegistry
-      address: "0xeB13EBE7613f9FC03A4ac091574Dc04ceb45562f"
-      startBlock: 1800000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -62,13 +57,10 @@ dataSources:
         - event: StatusChanged(indexed address,bytes32,bytes32)
           handler: handleStatusChanged
       file: ./src/shareholder-registry-mapping.ts
-    network: evmos
   - kind: ethereum
     name: Voting
     source:
       abi: Voting
-      address: "0x469EF10604015A07dD4CBca3Ff5baeb80B41bfF4"
-      startBlock: 1800000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -82,13 +74,10 @@ dataSources:
         - event: DelegateChanged(indexed address,address,address)
           handler: handleDelegateChanged
       file: ./src/voting-mapping.ts
-    network: evmos
   - kind: ethereum
     name: TelediskoToken
     source:
       abi: TelediskoToken
-      address: "0x64Fd2411C9b6c0d2F6F70dAA77Bac63E93D6AB2B"
-      startBlock: 1800000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -108,4 +97,3 @@ dataSources:
         - event: VestingSet(address,uint256)
           handler: handleVestingSet
       file: ./src/teledisko-token-mapping.ts
-    network: evmos
