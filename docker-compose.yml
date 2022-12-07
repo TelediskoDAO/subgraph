@@ -36,7 +36,7 @@ services:
       - ./data/ipfs:/data/ipfs
     restart: always 
   postgres:
-    image: postgres:15.1@sha256:2d1e636f07781d4799b3f2edbff78a0a5494f24c4512cb56a83ebfd0e04ec074
+    image: postgres:15.1
     ports:
       - '5432:5432'
     command:
