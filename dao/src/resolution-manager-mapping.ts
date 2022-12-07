@@ -206,7 +206,7 @@ export function handleResolutionExecuted(event: ResolutionExecuted): void {
     const blockChainResolution = resolutionManager.resolutions(
       event.params.resolutionId
     );
-    resolutionEntity.executionTimestamp = blockChainResolution.value6;
+    resolutionEntity.executionTimestamp = blockChainResolution.value7;
     resolutionEntity.save();
     return;
   }
