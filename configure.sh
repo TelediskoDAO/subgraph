@@ -12,7 +12,7 @@ ufw allow 443/tcp
 ufw enable
 
 # Add user worker
-adduser worker
+adduser --disabled-password worker
 mkdir ~worker/.ssh
 cp ~root/.ssh/authorized_keys ~worker/.ssh/
 chmod 600 -R ~worker/.ssh/
@@ -20,19 +20,19 @@ chmod 700 ~worker/.ssh
 chown worker:worker -R ~worker/.ssh
 
 # Install docker and docker-compose
-apt install apt-transport-https ca-certificates curl software-properties-common
+apt install -y apt-transport-https ca-certificates curl software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 apt update
 # apt-cache policy docker-ce
-apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
 ## Add worker to docker users
 usermod -aG docker worker
 
 
 # Install zsh
-apt install zsh
+apt install -y zsh
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 
@@ -47,25 +47,23 @@ bind-key C-a last-window
 EOF
 
 
-# install node 16
+# install node 18
 # https://github.com/nodesource/distributions#deb
-curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
-apt-get install -y nodejs
+curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+apt install -y nodejs
 
 
 # install pnpm
 npm install -g pnpm
 
-
-
 # install nginx
-apt install nginx
+apt install -y nginx
 # copy file
 ln -s /etc/nginx/sites-available/graph.dao.teledisko.com /etc/nginx/sites-enabled
 
 
 # install certbot
-apt install snapd
+apt install -y snapd
 snap install core
 snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
