@@ -36,6 +36,9 @@ Solution:
 - if so, check the new lowest block number
 - update the lowest block number in `docker-compose.yml`, env variable `GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER`
 
+### It doesn't index
+
+I (Alberto) think it's related to this log message `INFO Scanning blocks [0, 0], range_size: 1 [...]`. I noticed that in testnet the genesis block changes (do they cleanup the chain every now and then?). Anyway in our `.env` file we have the entry `GENESIS_BLOCK=<number>`, it seems to me that if this number is wrong (because the chain has been cleaned up, and it doesn't exist anymore) then the indexing doesn't work. What you should do in that case is check whenver the genesis block changed (I did a binary search in their [explorer](https://evm.evmos.dev/block/10065521/transactions)), update the env, restart docker compose.
 
 # Installation
 ```
