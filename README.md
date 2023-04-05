@@ -91,3 +91,14 @@ graph deploy --product hosted-service TelediskoDAO/<subgraph-name>
 ```
 
 You should now see the indexed graph on the dashboard.
+
+## Dumb backup
+
+```
+export IPFS_PATH=subgraph/data/ipfs/
+
+for cid in $(curl 'https://graph.dao.teledisko.com/subgraphs/name/TelediskoDAO/dao' -X POST -H 'Accept: application/json, multipart/mixed' -H 'content-type: application/json' --data-raw '{"query":"query MyQuery {\n  resolutions {\n    ipfsDataURI\n  }\n}","variables":null,"operationName":"MyQuery","extensions":{"headers":null}}' | jq ".data.resolutions[].ipfsDataURI" -r)
+do
+    ipfs cat ${cid} > backup/${cid}
+done
+```
