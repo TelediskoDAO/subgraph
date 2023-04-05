@@ -1,6 +1,7 @@
 import { StatusChanged } from '../generated/ShareholderRegistry/ShareholderRegistry';
 import { log, Bytes } from '@graphprotocol/graph-ts';
 import { getDaoManagerEntity } from './dao-manager';
+import { DaoUser } from '../generated/schema';
 
 const CONTRIBUTOR_STATUS = '0x84d5b933b93417199db826f5da9d5b1189791cb2dfd61240824c7e46b055f03d'
 const MANAGING_BOARD_STATUS = '0x1417f6a224499a6e3918f776fd5ff7d6d29c2d693d9862a904be8a74faad51f1'
@@ -37,16 +38,23 @@ function getNewAddressesWithoutAddress(daoManagerEntityList: Bytes[], toRemove: 
 
 export function handleStatusChanged(event: StatusChanged): void {
   const address = event.params.account
+  const addressHexString = address.toHexString()
   const daoMangerEntity = getDaoManagerEntity()
 
   const previousHexString = event.params.previous.toHexString()
   const currentHexString = event.params.current.toHexString()
 
   log.info('SHAREHOLDER_REGISTRY handleStatusChanged, address {}, previous {}, current {}', [
-    address.toHexString(),
+    addressHexString,
     getStatusNameFromHexString(previousHexString),
     getStatusNameFromHexString(currentHexString)
   ])
+
+  const daoUser = DaoUser.load(addressHexString) || new DaoUser(addressHexString)
+  if (daoUser) {
+    daoUser.address = address
+    daoUser.save()
+  }
 
   // remove the address from the "previous" list/s
   if (previousHexString == MANAGING_BOARD_STATUS) {
