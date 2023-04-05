@@ -45,7 +45,7 @@ export function handleStatusChanged(event: StatusChanged): void {
   const currentHexString = event.params.current.toHexString()
 
   log.info('SHAREHOLDER_REGISTRY handleStatusChanged, address {}, previous {}, current {}', [
-    address.toHexString(),
+    addressHexString,
     getStatusNameFromHexString(previousHexString),
     getStatusNameFromHexString(currentHexString)
   ])
