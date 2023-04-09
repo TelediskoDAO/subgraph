@@ -95,6 +95,7 @@ export function handleResolutionApproved(event: ResolutionApproved): void {
     resolutionEntity.approveTimestamp = blockChainResolution.value2;
     resolutionEntity.approveBy = event.transaction.from;
     resolutionEntity.snapshotId = blockChainResolution.value3;
+    resolutionEntity.hasQuorum = resolutionEntity.isNegative;
 
     for (
       let index = 0;
