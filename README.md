@@ -94,6 +94,8 @@ You should now see the indexed graph on the dashboard.
 
 ## Dumb backup
 
+Export:
+
 ```
 export IPFS_PATH=subgraph/data/ipfs/
 
@@ -101,4 +103,10 @@ for cid in $(curl 'https://graph.dao.teledisko.com/subgraphs/name/TelediskoDAO/d
 do
     ipfs cat ${cid} > backup/${cid}
 done
+```
+
+Restore:
+
+```
+ipfs add *
 ```
