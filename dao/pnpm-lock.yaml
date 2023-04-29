@@ -1,11 +1,11 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@graphprotocol/graph-cli': 0.34.0
+  '@graphprotocol/graph-cli': 0.37.0
   '@graphprotocol/graph-ts': 0.29.0
 
 dependencies:
-  '@graphprotocol/graph-cli': 0.34.0
+  '@graphprotocol/graph-cli': 0.37.0
   '@graphprotocol/graph-ts': 0.29.0
 
 packages:
@@ -197,10 +197,21 @@ packages:
       '@ethersproject/strings': 5.7.0
     dev: false
 
-  /@graphprotocol/graph-cli/0.34.0:
-    resolution: {integrity: sha512-tHmephhj5i6SQIyHNpF/dP9QEuVz4jdyg7CEfo0r3/3Wq/CC/turoVEZ2QK7h4sEg9dRJW/jampoD0BO7bVGWw==}
+  /@float-capital/float-subgraph-uncrashable/0.0.0-alpha.6:
+    resolution: {integrity: sha512-ZPnxfewgEAr3UWjLQd1XRyx4e6kffLDaLHJiDsS8pLzVi84EOQVWeFgYOXajav/zM+QSlbTkCF9F1hVSUdcV1Q==}
     hasBin: true
     dependencies:
+      '@rescript/std': 9.0.0
+      graphql: 16.6.0
+      graphql-import-node: 0.0.5_graphql@16.6.0
+      js-yaml: 4.1.0
+    dev: false
+
+  /@graphprotocol/graph-cli/0.37.0:
+    resolution: {integrity: sha512-p//lNNxDTFO05LntKHeDt1sCwRxJHsdcIN2P9/FPnxE5Z2N3n3z0jHEifRhxrPpfkjKyydStT7TM5QMCqxf1kQ==}
+    hasBin: true
+    dependencies:
+      '@float-capital/float-subgraph-uncrashable': 0.0.0-alpha.6
       assemblyscript: 0.19.10
       binary-install-raw: 0.0.13_debug@4.3.1
       chalk: 3.0.0
@@ -236,6 +247,10 @@ packages:
     resolution: {integrity: sha512-9rCouklL2CjlqtywcwSw++MzjBWlmm6274j4s5HokjOTxr64ER7SCKx+2iCqVV0/S7ivc63MzIHlCLSCjPjbiA==}
     dependencies:
       assemblyscript: 0.19.10
+    dev: false
+
+  /@rescript/std/9.0.0:
+    resolution: {integrity: sha512-zGzFsgtZ44mgL4Xef2gOy1hrRVdrs9mcxCOOKZrIPsmbZW14yTkaF591GXxpQvjXiHtgZ/iA9qLyWH6oSReIxQ==}
     dev: false
 
   /@types/bn.js/5.1.1:
@@ -406,6 +421,10 @@ packages:
     resolution: {integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==}
     dependencies:
       sprintf-js: 1.0.3
+    dev: false
+
+  /argparse/2.0.1:
+    resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
     dev: false
 
   /asap/2.0.6:
@@ -958,8 +977,8 @@ packages:
     resolution: {integrity: sha512-lVjqCSCIAUDZPAZIeyM125HXfNvOmYYInciphNrLrylUtKyW66meAjSPXWchKVzoIYZx69TPnAepVSSkeawoIw==}
     engines: {node: '>= 0.8'}
     dependencies:
-      JSONStream: 1.3.2
       debug: 3.2.7
+      JSONStream: 1.3.2
       readable-stream: 1.0.34
       split-ca: 1.0.1
     transitivePeerDependencies:
@@ -1300,9 +1319,22 @@ packages:
     resolution: {integrity: sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==}
     dev: false
 
+  /graphql-import-node/0.0.5_graphql@16.6.0:
+    resolution: {integrity: sha512-OXbou9fqh9/Lm7vwXT0XoRN9J5+WCYKnbiTalgFDvkQERITRmcfncZs6aVABedd5B85yQU5EULS4a5pnbpuI0Q==}
+    peerDependencies:
+      graphql: '*'
+    dependencies:
+      graphql: 16.6.0
+    dev: false
+
   /graphql/15.5.0:
     resolution: {integrity: sha512-OmaM7y0kaK31NKG31q4YbD2beNYa6jBBKtMFT6gLYJljHLJr42IqJ8KX08u3Li/0ifzTU5HjmoOOrwa5BRLeDA==}
     engines: {node: '>= 10.x'}
+    dev: false
+
+  /graphql/16.6.0:
+    resolution: {integrity: sha512-KPIBPDlW7NxrbT/eh4qPXz5FiFdL5UbaA0XUNz2Rp3Z3hqBSkbj0GVjwFDztsWVauZUWsbKHgMg++sk8UX0bkw==}
+    engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
     dev: false
 
   /har-schema/2.0.0:
@@ -1714,13 +1746,13 @@ packages:
       '@types/lodash': 4.14.189
       '@types/node': 12.20.55
       '@types/ws': 7.4.7
-      JSONStream: 1.3.5
       commander: 2.20.3
       delay: 5.0.0
       es6-promisify: 5.0.0
       eyes: 0.1.8
       isomorphic-ws: 4.0.1_ws@7.5.9
       json-stringify-safe: 5.0.1
+      JSONStream: 1.3.5
       lodash: 4.17.21
       uuid: 8.3.2
       ws: 7.5.9
@@ -1743,6 +1775,13 @@ packages:
     dependencies:
       argparse: 1.0.10
       esprima: 4.0.1
+    dev: false
+
+  /js-yaml/4.1.0:
+    resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
+    hasBin: true
+    dependencies:
+      argparse: 2.0.1
     dev: false
 
   /jsbn/0.1.1:
@@ -2065,6 +2104,7 @@ packages:
 
   /multiaddr/6.1.1:
     resolution: {integrity: sha512-Q1Ika0F9MNhMtCs62Ue+GWIJtRFEhZ3Xz8wH7/MZDVZTWhil1/H2bEGN02kUees3hkI3q1oHSjmXYDM0gxaFjQ==}
+    deprecated: This module is deprecated, please upgrade to @multiformats/multiaddr
     dependencies:
       bs58: 4.0.1
       class-is: 1.1.0
@@ -2076,6 +2116,7 @@ packages:
 
   /multiaddr/7.5.0:
     resolution: {integrity: sha512-GvhHsIGDULh06jyb6ev+VfREH9evJCFIRnh3jUt9iEZ6XDbyoisZRFEI9bMvK/AiR6y66y6P+eoBw9mBYMhMvw==}
+    deprecated: This module is deprecated, please upgrade to @multiformats/multiaddr
     dependencies:
       buffer: 5.7.1
       cids: 0.8.3

@@ -1,9 +1,7 @@
 version: '3'
 services:
   graph-node:
-    # tag v0.28.2
-    # https://github.com/graphprotocol/graph-node/releases/tag/v0.28.2
-    image: graphprotocol/graph-node:d33bb7e
+    image: graphprotocol/graph-node:v0.29.0
     ports:
       - '8000:8000'
       - '8001:8001'
@@ -25,6 +23,7 @@ services:
       GRAPH_LOG: info
       GRAPH_ALLOW_NON_DETERMINISTIC_IPFS: 1
       GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER: ${GENESIS_BLOCK}
+      EXPERIMENTAL_SUBGRAPH_VERSION_SWITCHING_MODE: synced
     restart: always 
   ipfs:
     # image: ipfs/go-ipfs:v0.10.0
